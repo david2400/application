@@ -10,5 +10,5 @@ export class AplicationsDto extends PartialType(UpdateAplicationsDto) {
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  Permission: DeepPartial<PermissionDto[]>
+  permission: DeepPartial<PermissionDto[]>
 }

@@ -12,17 +12,17 @@ export class UserService {
 
   async createUser(user: CreateUserDto) {
     const result =
-      (await this.findOneByEmail(user.Email)) || (await this.findOneByUsername(user.Username))
+      (await this.findOneByEmail(user.email)) || (await this.findOneByUsername(user.username))
     if (result != null) {
       throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
     }
     const newUser = this.userRepository.create(user)
 
-    const profile = await this.profileService.findOne(user.ProfileId)
+    const profile = await this.profileService.findOne(user.profile_id)
     if (!profile) {
       throw new HttpException({message: 'The profile does not exist!'}, HttpStatus.NOT_FOUND)
     }
-    newUser.Profile = profile
+    newUser.profile = profile
 
     const results = await this.userRepository.save(newUser)
     // const sendEmail = await this.sendEmail()
@@ -31,7 +31,7 @@ export class UserService {
   }
 
   async deleteUser(id: number) {
-    const result = await this.userRepository.softDelete({Id: id})
+    const result = await this.userRepository.softDelete({id: id})
     if (result.affected === 0) {
       throw new HttpException(
         {message: 'User does not exist or could not be deleted!'},
@@ -44,16 +44,16 @@ export class UserService {
   async findOneByUsername(username: string): Promise<UpdateUserDto> {
     const user = await this.userRepository.findOne({
       relations: {
-        Profile: true,
+        profile: true,
       },
-      where: {Username: username},
+      where: {username: username},
     })
     return user
   }
 
   async findOneByEmail(email: string): Promise<any> {
     const user = await this.userRepository.findOne({
-      where: {Email: email},
+      where: {email: email},
     })
 
     return user
@@ -61,7 +61,7 @@ export class UserService {
 
   async findOne(id: number): Promise<User> {
     const role = await this.userRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return role
   }
@@ -73,15 +73,15 @@ export class UserService {
 
   async getRefreshTokenOfUserId(user_id: number) {
     const user = await this.userRepository.findOne({
-      select: {Id: true, Username: true, RefreshToken: true},
-      where: {Id: user_id},
+      select: {id: true, username: true, refresh_token: true},
+      where: {id: user_id},
     })
 
     return user
   }
 
   async restore(id: number) {
-    const result = await this.userRepository.recover({Id: id})
+    const result = await this.userRepository.recover({id: id})
     if (result.DeleteAt === undefined) {
       throw new HttpException(
         {message: 'user does not exist or could not be restored!'},
@@ -93,9 +93,9 @@ export class UserService {
 
   async removeRefreshToken(user_id: number): Promise<any> {
     const result = await this.userRepository.update(
-      {Id: user_id},
+      {id: user_id},
       {
-        RefreshToken: null,
+        refresh_token: null,
       }
     )
     if (result.affected === 0) {
@@ -116,14 +116,6 @@ export class UserService {
       )
     }
 
-    if (newUser.Profile.Id != user.ProfileId) {
-      const profile = await this.profileService.findOne(user.ProfileId)
-      if (!profile) {
-        throw new HttpException({message: 'The profile does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newUser.Profile = profile
-    }
-
     this.userRepository.merge(newUser, user)
 
     const result = await this.userRepository.save(newUser)
@@ -135,9 +127,9 @@ export class UserService {
     const hashRefreshToken = refreshToken
 
     const result = await this.userRepository.update(
-      {Id: user_id},
+      {id: user_id},
       {
-        RefreshToken: hashRefreshToken,
+        refresh_token: hashRefreshToken,
       }
     )
     if (result.affected === 0) {

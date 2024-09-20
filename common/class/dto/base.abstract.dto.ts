@@ -5,7 +5,7 @@ export class BaseDto {
   @IsOptional()
   @IsDate()
   @ApiProperty()
-  readonly CreatedAt: Date
+  readonly created_at: Date
 
   @IsOptional()
   @IsDate()

@@ -21,7 +21,7 @@ export class AplicationsService {
   }
 
   async delete(id: number): Promise<UpdateResult> {
-    const result = await this.permissionRepository.softDelete({Id: id})
+    const result = await this.permissionRepository.softDelete({id: id})
     if (result.affected === 0) {
       throw new HttpException(
         {message: 'The Aplication does not exist or could not be deleted!'},
@@ -33,7 +33,7 @@ export class AplicationsService {
   }
 
   async restore(id: number) {
-    const result = await this.permissionRepository.recover({Id: id})
+    const result = await this.permissionRepository.recover({id: id})
     if (result.DeleteAt === undefined) {
       throw new HttpException(
         {message: 'The Aplication does not exist or could not be restored!'},
@@ -61,7 +61,7 @@ export class AplicationsService {
 
   async findOneByRolename(permission: any): Promise<Aplications[]> {
     const permissions = await this.permissionRepository.find({
-      where: {Name: permission.Name},
+      where: {name: permission.name},
     })
 
     return permissions
@@ -69,7 +69,7 @@ export class AplicationsService {
 
   async findOne(id: number): Promise<Aplications> {
     const permission = await this.permissionRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return permission
   }

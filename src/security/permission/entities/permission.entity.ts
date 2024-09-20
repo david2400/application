@@ -5,31 +5,38 @@ import {RolePermission} from '@modules/security/role-permission/entities/role-pe
 
 @Entity('Permission')
 export class Permission extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Name: string
+  name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Description: string
+  description: string
 
-  @ManyToOne(() => Aplications, (aplications) => aplications.Permission, {
+  @Column({
+    type: 'int',
+    nullable: false,
+  })
+  aplications_id: number
+
+  @ManyToOne(() => Aplications, (aplications) => aplications.permission, {
     cascade: true,
     lazy: true,
+    persistence: true,
   })
-  @JoinColumn([{name: 'AplicationsId', referencedColumnName: 'Id'}])
-  Aplications: Aplications
+  @JoinColumn([{name: 'aplications_id', referencedColumnName: 'id'}])
+  aplications: Aplications
 
-  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.Permission, {
+  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.permission, {
     eager: true,
     lazy: true,
   })
-  RolePermission: RolePermission[]
+  role_permission: RolePermission[]
 }

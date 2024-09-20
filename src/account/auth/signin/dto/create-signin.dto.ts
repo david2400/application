@@ -2,8 +2,8 @@ import {IsString} from 'class-validator'
 
 export class CreateSigninDto {
   @IsString()
-  Username: string
+  username: string
 
   @IsString()
-  Password: string
+  password: string
 }

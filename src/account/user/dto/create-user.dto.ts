@@ -6,48 +6,48 @@ export class CreateUserDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Name: string
+  name: string
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  LastName: string
+  last_name: string
 
   @IsNumberString()
   @ApiProperty()
-  CardId: string
+  card_id: string
 
   @IsEmail()
   @ApiProperty()
-  Email: string
+  email: string
 
   @IsString()
   @ApiProperty()
-  Gender: string
+  gender: string
 
   @IsString()
   @ApiProperty()
-  Address: string
+  address: string
 
   @IsNumberString()
   @ApiProperty()
-  Phone: string
+  phone: string
 
   @IsNotEmpty()
   @ApiProperty()
-  Username: string
+  username: string
 
   @IsNotEmpty()
   @ApiProperty()
-  Password: string
+  password: string
 
   @IsOptional()
   @IsString()
   @ApiProperty()
-  RefreshToken?: string
+  refresh_token?: string
 
   @IsNumber()
   @IsOptional()
   @ApiProperty()
-  ProfileId: number
+  profile_id: number
 }

@@ -17,11 +17,11 @@ export class ProfileService {
     }
     const newProfile = this.profileRepository.create(profile)
 
-    const roles = await this.roleService.findByIds(profile.ProfileRole)
-    if (roles.length == 0 || roles.length < profile.ProfileRole.length) {
+    const roles = await this.roleService.findByIds(profile.profile_role)
+    if (roles.length == 0 || roles.length < profile.profile_role.length) {
       throw new HttpException({message: 'The roles are not exist!'}, HttpStatus.NOT_FOUND)
     }
-    newProfile.ProfileRole = roles
+    newProfile.profile_role = roles
 
     const result = await this.profileRepository.save(newProfile)
 
@@ -29,7 +29,7 @@ export class ProfileService {
   }
 
   async delete(id: number): Promise<UpdateResult> {
-    const result = await this.profileRepository.softDelete({Id: id})
+    const result = await this.profileRepository.softDelete({id: id})
     if (result.affected === 0) {
       throw new HttpException(
         {message: 'The profile does not exist or could not be deleted!'},
@@ -41,7 +41,7 @@ export class ProfileService {
   }
 
   async restore(id: number) {
-    const result = await this.profileRepository.recover({Id: id})
+    const result = await this.profileRepository.recover({id: id})
 
     if (result.DeleteAt === undefined) {
       throw new HttpException(
@@ -63,12 +63,12 @@ export class ProfileService {
       )
     }
 
-    if (profile.ProfileRole) {
-      const roles = await this.roleService.findByIds(profile.ProfileRole)
-      if (roles.length == 0 || roles.length < profile.ProfileRole.length) {
+    if (profile.profile_role) {
+      const roles = await this.roleService.findByIds(profile.profile_role)
+      if (roles.length == 0 || roles.length < profile.profile_role.length) {
         throw new HttpException({message: 'The roles are not exist!'}, HttpStatus.NOT_FOUND)
       }
-      newProfile.ProfileRole = roles
+      newProfile.profile_role = roles
     }
 
     this.profileRepository.merge(newProfile, profile)
@@ -80,21 +80,21 @@ export class ProfileService {
 
   async findOneByName(profile: any): Promise<any[]> {
     const roles = await this.profileRepository.find({
-      where: {Name: profile.Name},
+      where: {name: profile.name},
     })
     return roles
   }
 
   async findOne(id: number): Promise<Profile> {
     const profile = await this.profileRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return profile
   }
 
   async findRoleUser(userid: number): Promise<Profile[]> {
     const user = await this.profileRepository.find({
-      select: {Name: true},
+      select: {name: true},
     })
     return user
   }

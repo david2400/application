@@ -2,7 +2,7 @@ import {DeepPartial, FindManyOptions, FindOneOptions, Repository, UpdateResult} 
 import {BaseInterfaceRepository} from '@common/interface/repository/base.repository.interface'
 
 interface HasId {
-  Id: any
+  id: any
 }
 
 export abstract class BaseAbstractRepository<T extends HasId>
@@ -49,7 +49,7 @@ export abstract class BaseAbstractRepository<T extends HasId>
 
   async findOneById(id: any): Promise<T> {
     const options: FindOneOptions<T> = {
-      where: {Id: id},
+      where: {id: id},
     }
 
     return await this.entity.findOne(options)

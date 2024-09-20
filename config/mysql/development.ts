@@ -1,7 +1,7 @@
 export const config = {
   db: {
     type: process.env.DB_TYPE || 'mysql',
-    synchronize: false,
+    synchronize: true,
     logging: true,
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3308,

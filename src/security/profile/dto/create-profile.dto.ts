@@ -8,15 +8,15 @@ export class CreateProfileDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Name: string
+  name: string
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Description: string
+  description: string
 
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  ProfileRole?: DeepPartial<RoleDto[]>
+  profile_role?: DeepPartial<RoleDto[]>
 }

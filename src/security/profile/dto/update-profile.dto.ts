@@ -7,5 +7,5 @@ export class UpdateProfileDto extends PartialType(CreateProfileDto) {
   @IsUUID()
   @IsOptional()
   @ApiProperty()
-  readonly Id: number
+  readonly id: number
 }

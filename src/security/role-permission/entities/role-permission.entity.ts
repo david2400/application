@@ -5,26 +5,28 @@ import {Role} from '@modules/security/role/entities/role.entity'
 
 @Entity('RolePermission')
 export class RolePermission extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Level: string
+  level: string
 
-  @ManyToOne(() => Permission, (permission) => permission.RolePermission, {
+  @ManyToOne(() => Permission, (permission) => permission.role_permission, {
     cascade: true,
     lazy: true,
+    persistence: true,
   })
-  @JoinColumn([{name: 'PermissionId', referencedColumnName: 'Id'}])
-  Permission: Permission
+  @JoinColumn([{name: 'permission_id', referencedColumnName: 'id'}])
+  permission: Permission
 
-  @ManyToOne(() => Role, (role) => role.RolePermission, {
+  @ManyToOne(() => Role, (role) => role.role_permission, {
     cascade: true,
     lazy: true,
+    persistence: true,
   })
-  @JoinColumn([{name: 'RoleId', referencedColumnName: 'Id'}])
-  Role: Role
+  @JoinColumn([{name: 'role_id', referencedColumnName: 'id'}])
+  role: Role
 }

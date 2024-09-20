@@ -22,7 +22,7 @@ export class RoleService {
   }
 
   async delete(id: number): Promise<UpdateResult> {
-    const result = await this.roleRepository.softDelete({Id: id})
+    const result = await this.roleRepository.softDelete({id: id})
     if (result.affected === 0) {
       throw new HttpException(
         {message: 'The role does not exist or could not be deleted!'},
@@ -34,7 +34,7 @@ export class RoleService {
   }
 
   async restore(id: number) {
-    const result = await this.roleRepository.recover({Id: id})
+    const result = await this.roleRepository.recover({id: id})
     if (result.DeleteAt === undefined) {
       throw new HttpException(
         {message: 'The role does not exist or could not be restored!'},
@@ -60,7 +60,7 @@ export class RoleService {
 
   async findOneByRolename(role: any) {
     const roles = await this.roleRepository.find({
-      where: {Name: role.Name},
+      where: {name: role.name},
     })
 
     return roles
@@ -68,7 +68,7 @@ export class RoleService {
 
   async findOne(id: number) {
     const role = await this.roleRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return role
   }

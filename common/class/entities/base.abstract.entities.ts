@@ -2,11 +2,11 @@ import {CreateDateColumn, DeleteDateColumn, UpdateDateColumn} from 'typeorm'
 
 export class BaseEntity {
   @CreateDateColumn()
-  readonly CreatedAt: Date
+  readonly created_at: Date
 
   @UpdateDateColumn()
-  readonly UpdateAt: Date
+  readonly update_at: Date
 
   @DeleteDateColumn()
-  readonly DeleteAt: Date
+  readonly delete_at: Date
 }

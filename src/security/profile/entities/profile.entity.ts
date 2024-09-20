@@ -5,27 +5,27 @@ import {User} from '@modules/account/user/entities/user.entity'
 
 @Entity('Profile')
 export class Profile extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Name: string
+  name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Description: string
+  description: string
 
-  @ManyToMany(() => Role, (role) => role.RoleProfile, {lazy: true, eager: true})
-  ProfileRole: Role[]
+  @ManyToMany(() => Role, (role) => role.role_profile, {lazy: true, eager: true})
+  profile_role: Role[]
 
-  @OneToMany(() => User, (user) => user.Profile, {
+  @OneToMany(() => User, (user) => user.profile, {
     eager: true,
     lazy: true,
   })
-  User: User[]
+  user: User[]
 }

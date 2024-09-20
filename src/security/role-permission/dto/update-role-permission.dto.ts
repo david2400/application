@@ -7,5 +7,5 @@ export class UpdateRolePermissionDto extends PartialType(CreateRolePermissionDto
   @IsUUID()
   @IsOptional()
   @ApiProperty()
-  readonly Id: number
+  readonly id: number
 }

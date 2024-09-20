@@ -6,15 +6,15 @@ export class CreateRolePermissionDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Level: string
+  level: string
 
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  PermissionId: number
+  permission_id: number
 
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  RoleId: number
+  role_id: number
 }

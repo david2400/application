@@ -6,10 +6,10 @@ export class CreateAplicationsDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Name: string
+  name: string
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Description: string
+  description: string
 }

@@ -6,16 +6,16 @@ export class CreatePermissionDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Name: string
+  name: string
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  Description: string
+  description: string
 
   @IsInt()
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
-  AplicationsId: number
+  aplications_id: number
 }

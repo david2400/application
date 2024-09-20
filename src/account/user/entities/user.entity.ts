@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  OneToMany,
   BeforeInsert,
   BeforeUpdate,
   ManyToOne,
@@ -14,79 +13,79 @@ import {Profile} from '@modules/security/profile/entities/profile.entity'
 
 @Entity('User')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Name: string
+  name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  LastName: string
+  last_name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  CardId: string
+  card_id: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Email: string
+  email: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Gender: string
+  gender: string
 
   @Column({
     type: 'varchar',
     nullable: true,
   })
-  Address: string
+  address: string
 
   @Column({
     type: 'varchar',
     nullable: true,
   })
-  Phone: string
+  phone: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Username: string
+  username: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Password: string
+  password: string
 
   @Column({
     type: 'text',
     nullable: true,
   })
-  RefreshToken: string
+  refresh_token: string
 
-  @ManyToOne(() => Profile, (profile) => profile.User, {
+  @ManyToOne(() => Profile, (profile) => profile.user, {
     cascade: true,
     lazy: true,
   })
-  @JoinColumn([{name: 'ProfileId', referencedColumnName: 'Id'}])
-  Profile: Profile
+  @JoinColumn([{name: 'profile_id', referencedColumnName: 'id'}])
+  profile: Profile
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    this.Password = await bcrypt.hashSync(this.Password, 10)
+    this.password = await bcrypt.hashSync(this.password, 10)
   }
 }

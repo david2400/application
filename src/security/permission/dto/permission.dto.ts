@@ -10,5 +10,5 @@ export class PermissionDto extends PartialType(UpdatePermissionDto) {
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  RolePermission: DeepPartial<RolePermissionDto[]>
+  role_permission: DeepPartial<RolePermissionDto[]>
 }

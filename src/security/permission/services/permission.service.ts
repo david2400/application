@@ -1,6 +1,5 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {UpdateResult} from 'typeorm'
-import {AplicationsService} from '@modules/security/aplications/services/aplications.service'
 import {Permission} from '@modules/security/permission/entities/permission.entity'
 import {CreatePermissionDto} from '@modules/security/permission/dto/create-permission.dto'
 import {UpdatePermissionDto} from '@modules/security/permission/dto/update-permission.dto'
@@ -8,10 +7,7 @@ import {PermissionRepository} from '@modules/security/permission/repository/perm
 
 @Injectable()
 export class PermissionService {
-  constructor(
-    private permissionRepository: PermissionRepository,
-    private readonly aplicationService: AplicationsService
-  ) {}
+  constructor(private permissionRepository: PermissionRepository) {}
 
   async createPermission(permission: CreatePermissionDto): Promise<any> {
     const result = await this.findOneByRolename(permission)
@@ -22,19 +18,13 @@ export class PermissionService {
 
     const newPermission = this.permissionRepository.create(permission)
 
-    const aplications = await this.aplicationService.findOne(permission.AplicationsId)
-    if (!aplications) {
-      throw new HttpException({message: 'The aplication does not exist!'}, HttpStatus.NOT_FOUND)
-    }
-    newPermission.Aplications = aplications
-
     const results = await this.permissionRepository.save(newPermission)
 
     return results
   }
 
   async delete(id: number): Promise<UpdateResult> {
-    const result = await this.permissionRepository.softDelete({Id: id})
+    const result = await this.permissionRepository.softDelete({id: id})
 
     if (result.affected === 0) {
       throw new HttpException(
@@ -47,7 +37,7 @@ export class PermissionService {
   }
 
   async restore(id: number) {
-    const result = await this.permissionRepository.recover({Id: id})
+    const result = await this.permissionRepository.recover({id: id})
 
     if (result.DeleteAt === undefined) {
       throw new HttpException(
@@ -69,14 +59,6 @@ export class PermissionService {
       )
     }
 
-    if (newPermission.Aplications.Id != permission.AplicationsId) {
-      const aplications = await this.aplicationService.findOne(permission.AplicationsId)
-      if (!aplications) {
-        throw new HttpException({message: 'The aplication does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newPermission.Aplications = aplications
-    }
-
     this.permissionRepository.merge(newPermission, permission)
 
     const result = await this.permissionRepository.save(newPermission)
@@ -86,7 +68,7 @@ export class PermissionService {
 
   async findOneByRolename(permission: any): Promise<Permission[]> {
     const permissions = await this.permissionRepository.find({
-      where: {Name: permission.Name},
+      where: {name: permission.name},
     })
 
     return permissions
@@ -94,7 +76,7 @@ export class PermissionService {
 
   async findOne(id: number): Promise<Permission> {
     const permission = await this.permissionRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return permission
   }

@@ -4,23 +4,23 @@ import {Permission} from '@modules/security/permission/entities/permission.entit
 
 @Entity('Aplications')
 export class Aplications extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Name: string
+  name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Description: string
+  description: string
 
-  @OneToMany(() => Permission, (permission) => permission.Aplications, {
+  @OneToMany(() => Permission, (permission) => permission.aplications, {
     lazy: true,
   })
-  Permission: Permission[]
+  permission: Permission[]
 }

@@ -1,23 +1,17 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {UpdateResult} from 'typeorm'
-import {RoleService} from '@modules/security/role/services/role.service'
-import {PermissionService} from '@modules/security/permission/services/permission.service'
 import {RolePermissionRepository} from '@modules/security/role-permission/repository/role-permission.repository'
 import {CreateRolePermissionDto} from '@modules/security/role-permission/dto/create-role-permission.dto'
 import {UpdateRolePermissionDto} from '@modules/security/role-permission/dto/update-role-permission.dto'
 
 @Injectable()
 export class RolePermissionService {
-  constructor(
-    private rolePermissionRepository: RolePermissionRepository,
-    private permissionService: PermissionService,
-    private roleService: RoleService
-  ) {}
+  constructor(private rolePermissionRepository: RolePermissionRepository) {}
 
   async create(rolePermision: CreateRolePermissionDto): Promise<any> {
     const result = await this.findOneByRoleAndPermision(
-      rolePermision.PermissionId,
-      rolePermision.RoleId
+      rolePermision.permission_id,
+      rolePermision.role_id
     )
     if (result.length != 0) {
       throw new HttpException(
@@ -27,28 +21,12 @@ export class RolePermissionService {
     }
     const newRole = this.rolePermissionRepository.create(rolePermision)
 
-    if (rolePermision.PermissionId) {
-      const permission = await this.permissionService.findOne(rolePermision.PermissionId)
-      if (!permission) {
-        throw new HttpException({message: 'The permission does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newRole.Permission = permission
-    }
-
-    if (rolePermision.RoleId) {
-      const role = await this.roleService.findOne(rolePermision.RoleId)
-      if (!role) {
-        throw new HttpException({message: 'The role does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newRole.Role = role
-    }
-
     const results = await this.rolePermissionRepository.save(newRole)
     return results
   }
 
   async delete(id: number): Promise<UpdateResult> {
-    const result = await this.rolePermissionRepository.softDelete({Id: id})
+    const result = await this.rolePermissionRepository.softDelete({id: id})
     if (result.affected === 0) {
       throw new HttpException(
         {message: 'The role permission does not exist or could not be deleted!'},
@@ -60,7 +38,7 @@ export class RolePermissionService {
   }
 
   async restore(id: number) {
-    const result = await this.rolePermissionRepository.recover({Id: id})
+    const result = await this.rolePermissionRepository.recover({id: id})
 
     if (result.DeleteAt === undefined) {
       throw new HttpException(
@@ -82,22 +60,6 @@ export class RolePermissionService {
       )
     }
 
-    if (newRolePermission.Permission.Id != rolePermision.PermissionId) {
-      const permission = await this.permissionService.findOne(rolePermision.PermissionId)
-      if (!permission) {
-        throw new HttpException({message: 'The permission does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newRolePermission.Permission = permission
-    }
-
-    if (newRolePermission.Permission.Id != rolePermision.RoleId) {
-      const role = await this.roleService.findOne(rolePermision.RoleId)
-      if (!role) {
-        throw new HttpException({message: 'The role does not exist!'}, HttpStatus.NOT_FOUND)
-      }
-      newRolePermission.Role = role
-    }
-
     this.rolePermissionRepository.merge(newRolePermission, rolePermision)
 
     const result = await this.rolePermissionRepository.save(newRolePermission)
@@ -107,14 +69,14 @@ export class RolePermissionService {
 
   async findOneByRoleAndPermision(idPermission: number, idRole: number) {
     const rolePermision = await this.rolePermissionRepository.find({
-      where: {Permission: {Id: idPermission}, Role: {Id: idRole}},
+      where: {permission: {id: idPermission}, role: {id: idRole}},
     })
     return rolePermision
   }
 
   async findOne(id: number) {
     const rolePermision = await this.rolePermissionRepository.findOne({
-      where: {Id: id},
+      where: {id: id},
     })
     return rolePermision
   }

@@ -5,22 +5,22 @@ import {RolePermission} from '@modules/security/role-permission/entities/role-pe
 
 @Entity('Role')
 export class Role extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'Id'})
-  Id: number
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
+  id: number
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Name: string
+  name: string
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  Description: string
+  description: string
 
-  @ManyToMany(() => Profile, (profile) => profile.ProfileRole, {
+  @ManyToMany(() => Profile, (profile) => profile.profile_role, {
     cascade: true,
     onUpdate: 'CASCADE',
     lazy: true,
@@ -28,17 +28,17 @@ export class Role extends BaseEntity {
   @JoinTable({
     name: 'RoleProfile',
     joinColumn: {
-      name: 'RoleId',
+      name: 'role_id',
     },
     inverseJoinColumn: {
-      name: 'ProfileId',
+      name: 'profile_id',
     },
   })
-  RoleProfile: Profile[]
+  role_profile: Profile[]
 
-  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.Permission, {
+  @OneToMany(() => RolePermission, (rolePermission) => rolePermission.permission, {
     eager: true,
     lazy: true,
   })
-  RolePermission: RolePermission[]
+  role_permission: RolePermission[]
 }

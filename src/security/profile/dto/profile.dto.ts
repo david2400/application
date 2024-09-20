@@ -10,5 +10,5 @@ export class ProfileDto extends PartialType(UpdateProfileDto) {
   @IsArray()
   @IsOptional()
   @ApiProperty()
-  User: DeepPartial<UserDto[]>
+  user: DeepPartial<UserDto[]>
 }
