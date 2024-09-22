@@ -22,7 +22,7 @@ import {UpdateRoleDto} from '@modules/security/role/dto/update-role.input'
 export class RoleController {
   constructor(private roleService: RoleService) {}
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Crear rol de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -40,7 +40,7 @@ export class RoleController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Crear rol de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -63,7 +63,7 @@ export class RoleController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Eliminar rol de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -83,7 +83,7 @@ export class RoleController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Restaurar rol de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -103,7 +103,7 @@ export class RoleController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar todos los roles de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -123,7 +123,7 @@ export class RoleController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar un rol de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',

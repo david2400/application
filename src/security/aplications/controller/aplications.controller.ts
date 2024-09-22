@@ -22,7 +22,7 @@ import {UpdateAplicationsDto} from '@modules/security/aplications/dto/update-apl
 export class AplicationsController {
   constructor(private readonly aplicationsService: AplicationsService) {}
 
-  @ApiOperation({summary: 'crear aplicaciones para asignar permisos'})
+  @ApiOperation({summary: 'Crear aplicaciones para asignar permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -83,7 +83,7 @@ export class AplicationsController {
     return result
   }
 
-  @ApiOperation({summary: 'crear aplicaciones para asignar permisos'})
+  @ApiOperation({summary: 'Restaurar aplicaciones'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -103,7 +103,7 @@ export class AplicationsController {
     return result
   }
 
-  @ApiOperation({summary: 'crear aplicaciones para asignar permisos'})
+  @ApiOperation({summary: 'Buscar todos los aplicaciones'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -123,7 +123,7 @@ export class AplicationsController {
     return result
   }
 
-  @ApiOperation({summary: 'crear aplicaciones para asignar permisos'})
+  @ApiOperation({summary: 'Buscar aplicacion'})
   @ApiResponse({
     status: 500,
     description: 'server error',

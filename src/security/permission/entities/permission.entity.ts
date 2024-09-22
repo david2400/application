@@ -23,13 +23,14 @@ export class Permission extends BaseEntity {
   @Column({
     type: 'int',
     nullable: false,
+    unsigned: true,
   })
   aplications_id: number
 
   @ManyToOne(() => Aplications, (aplications) => aplications.permission, {
     cascade: true,
     lazy: true,
-    persistence: true,
+    persistence: false,
   })
   @JoinColumn([{name: 'aplications_id', referencedColumnName: 'id'}])
   aplications: Aplications

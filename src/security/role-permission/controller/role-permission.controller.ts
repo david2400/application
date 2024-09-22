@@ -22,7 +22,7 @@ import {UpdateRolePermissionDto} from '@modules/security/role-permission/dto/upd
 export class RolePermisionController {
   constructor(private rolePermissionService: RolePermissionService) {}
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Crear un permisos por rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -40,7 +40,7 @@ export class RolePermisionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Modificar permisos por rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -63,7 +63,7 @@ export class RolePermisionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Delete permisos por rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -83,7 +83,7 @@ export class RolePermisionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Restaurar permisos por rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -103,7 +103,7 @@ export class RolePermisionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar todos los permisos por rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -123,7 +123,7 @@ export class RolePermisionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar un permiso de un rol'})
   @ApiResponse({
     status: 500,
     description: 'server error',

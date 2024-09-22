@@ -6,11 +6,11 @@ export const config = {
     individualHooks: true,
     replication: {
       master: {
-        host: process.env.DB_HOST || 'masterHost',
+        host: process.env.DB_HOST || 'mysql',
         port: process.env.DB_PORT || 3306,
-        username: process.env.DB_USER || 'username',
-        password: process.env.DB_PASSWORD || 'password',
-        database: process.env.DB_NAME || 'dbname',
+        username: process.env.DB_USERNAME || 'root',
+        password: process.env.DB_PASSWORD || 'root',
+        database: process.env.DB_DATABASE || 'security',
       },
       slaves: [
         {

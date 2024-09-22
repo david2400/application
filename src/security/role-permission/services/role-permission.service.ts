@@ -22,6 +22,7 @@ export class RolePermissionService {
     const newRole = this.rolePermissionRepository.create(rolePermision)
 
     const results = await this.rolePermissionRepository.save(newRole)
+
     return results
   }
 

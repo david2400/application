@@ -22,7 +22,7 @@ import {UpdatePermissionDto} from '@modules/security/permission/dto/update-permi
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Crear permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -40,7 +40,7 @@ export class PermissionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Modificar permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -63,7 +63,7 @@ export class PermissionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Eliminar permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -83,7 +83,7 @@ export class PermissionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Restaurar permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -103,7 +103,7 @@ export class PermissionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar todos los permisos permisos'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -123,7 +123,7 @@ export class PermissionController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar un regitro de un permiso'})
   @ApiResponse({
     status: 500,
     description: 'server error',

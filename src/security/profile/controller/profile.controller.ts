@@ -22,7 +22,7 @@ import {UpdateProfileDto} from '@modules/security/profile/dto/update-profile.dto
 export class ProfileController {
   constructor(private profileService: ProfileService) {}
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Crear perfil de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -40,7 +40,7 @@ export class ProfileController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Modificar perfil de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -63,7 +63,7 @@ export class ProfileController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Eliminar perfil de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -83,7 +83,7 @@ export class ProfileController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Restaurar perfil de usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -103,7 +103,7 @@ export class ProfileController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar todos los perfiles de los usuarios'})
   @ApiResponse({
     status: 500,
     description: 'server error',
@@ -123,7 +123,7 @@ export class ProfileController {
     return result
   }
 
-  @ApiOperation({summary: 'crear marca'})
+  @ApiOperation({summary: 'Buscar un perfil de un usuario'})
   @ApiResponse({
     status: 500,
     description: 'server error',

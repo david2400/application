@@ -12,4 +12,9 @@ export class CreateAplicationsDto extends BaseDto {
   @IsNotEmpty()
   @ApiProperty()
   description: string
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  route: string
 }

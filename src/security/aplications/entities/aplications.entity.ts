@@ -17,6 +17,11 @@ export class Aplications extends BaseEntity {
     type: 'varchar',
     nullable: false,
   })
+  route: string
+
+  @Column({
+    type: 'varchar',
+  })
   description: string
 
   @OneToMany(() => Permission, (permission) => permission.aplications, {

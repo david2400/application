@@ -28,6 +28,5 @@ export const configuration = async (): Promise<Config> => {
     await import(`${__dirname}/mysql/${process.env.NODE_ENV || 'development'}`)
   )
 
-  // object deep merge
   return util.merge(config, environment)
 }
