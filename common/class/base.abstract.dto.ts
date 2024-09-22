@@ -10,10 +10,10 @@ export class BaseDto {
   @IsOptional()
   @IsDate()
   @ApiProperty()
-  readonly UpdatedAt: Date
+  readonly updated_at: Date
 
   @IsOptional()
   @IsDate()
   @ApiProperty()
-  readonly DeletedAt: Date
+  readonly deleted_at: Date
 }

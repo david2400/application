@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
-import {BaseEntity} from '@common/class/entities/base.abstract.entities'
+import {BaseEntity} from '@common/class/base.abstract.entities'
 import {Aplications} from '@modules/security/aplications/entities/aplications.entity'
 import {RolePermission} from '@modules/security/role-permission/entities/role-permission.entity'
 

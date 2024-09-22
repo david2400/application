@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm'
 import * as bcrypt from 'bcrypt'
-import {BaseEntity} from '@common/class/entities/base.abstract.entities'
+import {BaseEntity} from '@common/class/base.abstract.entities'
 import {Profile} from '@modules/security/profile/entities/profile.entity'
 
 @Entity('User')

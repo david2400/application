@@ -1,6 +1,6 @@
 import {IsEmail, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString} from 'class-validator'
 import {ApiProperty} from '@nestjs/swagger'
-import {BaseDto} from '@common/class/dto/base.abstract.dto'
+import {BaseDto} from '@common/class/base.abstract.dto'
 
 export class CreateUserDto extends BaseDto {
   @IsString()

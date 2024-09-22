@@ -1,6 +1,6 @@
 import {ApiProperty} from '@nestjs/swagger'
 import {IsInt, IsNotEmpty, IsNumber, IsString} from 'class-validator'
-import {BaseDto} from '@common/class/dto/base.abstract.dto'
+import {BaseDto} from '@common/class/base.abstract.dto'
 
 export class CreatePermissionDto extends BaseDto {
   @IsString()

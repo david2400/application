@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
-import {BaseAbstractRepository} from '@common/repository/base.abstract.repository'
+import {BaseAbstractRepository} from '@common/class/base.abstract.repository'
 import {RolePermission} from '@modules/security/role-permission/entities/role-permission.entity'
 
 @Injectable()
