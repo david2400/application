@@ -10,7 +10,7 @@ import {ConfigService} from '@nestjs/config'
 import {JwtService} from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import {jwtConstants} from '@/constants'
-import type {JwtPayload} from '@common/interface/login/signin.interface'
+import type {JwtPayload} from '@/interfaces/login/signin.interface'
 import {UserService} from '@modules/account/user/services/user.service'
 import {CreateSigninDto} from '@modules/account/auth/signin/dto/create-signin.dto'
 

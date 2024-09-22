@@ -1,5 +1,5 @@
 import {DeepPartial, FindManyOptions, FindOneOptions, Repository, UpdateResult} from 'typeorm'
-import {BaseInterfaceRepository} from '@common/interface/repository/base.repository.interface'
+import {BaseInterfaceRepository} from '@/interfaces/repository/base.repository.interface'
 
 interface HasId {
   id: any
