@@ -1,6 +1,8 @@
 import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
+import { InputType } from '@nestjs/graphql'
 import {IsEmail, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString} from 'class-validator'
 
+@InputType()
 export class CreateUserInput extends BaseDto {
   @IsString()
   @IsNotEmpty()

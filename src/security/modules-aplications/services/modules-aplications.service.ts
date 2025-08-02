@@ -1,13 +1,19 @@
-import {Injectable} from '@nestjs/common'
+import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common'
 import {CreateModulesAplicationInput} from '../dto/create-modules-aplication.input'
 import {UpdateModulesAplicationInput} from '../dto/update-modules-aplication.input'
 import {InjectRepository} from '@nestjs/typeorm'
 import {ModulesAplication} from '../entities/modules-aplication.entity'
 import {Repository} from 'typeorm'
 import {Mapper} from '@/common/mapper'
+import {ModulesAplicationInput} from '../dto/modules-aplication.input'
+import {GenericService} from '@/common/services'
+import { UpdateResultInput } from '@/common/domain/dto/update-result.input'
 
 @Injectable()
-export class ModulesAplicationsService {
+export class ModulesAplicationsService extends GenericService<
+  ModulesAplication,
+  ModulesAplicationInput
+> {
   constructor(
     @InjectRepository(ModulesAplication)
     private readonly modulesAplicationRepository: Repository<ModulesAplication>
@@ -88,12 +94,12 @@ export class ModulesAplicationsService {
     }
   }
 
-  async findOneByRoleAndPermision(idPermission: number, idRole: number) {
-    const rolePermision = await this.getRepository().find({
-      where: {permission: {id: idPermission}, role: {id: idRole}},
-    })
-    return rolePermision
-  }
+  // async findOneByRoleAndPermision(idPermission: number, idRole: number) {
+  //   const rolePermision = await this.getRepository().find({
+  //     where: {permission: {id: idPermission}, role: {id: idRole}},
+  //   })
+  //   return rolePermision
+  // }
 
   // async findOne(id: number) {
   //   const rolePermision = await this.getRepository().findOne({

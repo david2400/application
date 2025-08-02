@@ -2,14 +2,16 @@ import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typ
 import {Role} from '../../role/entities/role.entity'
 import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
 import {Permission} from '../../permission/entities/permission.entity'
-import {Field, Int} from '@nestjs/graphql'
+import {Field, Int, ObjectType} from '@nestjs/graphql'
 
 @Entity('RolePermission')
+@ObjectType()
 export class RolePermission extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: false,
   })
+  @Field(() => String)
   level: string
 
   @Column({

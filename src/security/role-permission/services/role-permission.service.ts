@@ -91,12 +91,12 @@ export class RolePermissionService extends GenericService<RolePermission, RolePe
     }
   }
 
-  async findOneByRoleAndPermision(idPermission: number, idRole: number) {
-    const rolePermision = await this.getRepository().find({
-      where: {permission: {id: idPermission}, role: {id: idRole}},
-    })
-    return rolePermision
-  }
+  // async findOneByRoleAndPermision(idPermission: number, idRole: number) {
+  //   const rolePermision = await this.getRepository().find({
+  //     where: {permission: {id: idPermission}, role: {id: idRole}},
+  //   })
+  //   return rolePermision
+  // }
 
   // async findOne(id: number) {
   //   const rolePermision = await this.getRepository().findOne({

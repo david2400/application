@@ -2,8 +2,10 @@ import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn
 import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
 import {RolePermission} from '../../role-permission/entities/role-permission.entity'
 import {Aplications} from '../../aplications/entities/aplications.entity'
+import { ObjectType } from '@nestjs/graphql'
 
 @Entity('Permission')
+@ObjectType()
 export class Permission extends BaseEntity {
   @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
   id: number

@@ -4,7 +4,9 @@ import {DeepPartial} from 'typeorm'
 import {IsArray, IsOptional, ValidateNested} from 'class-validator'
 import {UpdateAplicationsInput} from '@/src/security/aplications/dto/update-aplication.input'
 import {PermissionInput} from '../../permission/dto/permission.input'
+import {InputType, ObjectType} from '@nestjs/graphql'
 
+@ObjectType()
 export class AplicationsInput extends PartialType(UpdateAplicationsInput) {
   @ValidateNested()
   @IsArray()

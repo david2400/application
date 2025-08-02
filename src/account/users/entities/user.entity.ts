@@ -1,5 +1,6 @@
 import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
 import {Profile} from '@/src/security/profile/entities/profile.entity'
+import { ObjectType } from '@nestjs/graphql'
 import * as bcrypt from 'bcrypt'
 import {
   BeforeInsert,
@@ -12,6 +13,7 @@ import {
 } from 'typeorm'
 
 @Entity('User')
+@ObjectType()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
   id: number

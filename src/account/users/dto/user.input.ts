@@ -1,5 +1,7 @@
 import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
+import { ObjectType } from '@nestjs/graphql'
 
+@ObjectType()
 export class UserInput extends BaseDto {
   name: string
 
