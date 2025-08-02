@@ -1,0 +1,24 @@
+type ModulesAplication {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateModulesAplicationInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateModulesAplicationInput {
+  id: Int!
+}
+
+type Query {
+  modulesAplications: [ModulesAplication]!
+  modulesAplication(id: Int!): ModulesAplication
+}
+
+type Mutation {
+  createModulesAplication(createModulesAplicationInput: CreateModulesAplicationInput!): ModulesAplication!
+  updateModulesAplication(updateModulesAplicationInput: UpdateModulesAplicationInput!): ModulesAplication!
+  removeModulesAplication(id: Int!): ModulesAplication
+}

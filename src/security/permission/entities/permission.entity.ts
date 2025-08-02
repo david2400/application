@@ -1,7 +1,7 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
-import {BaseEntity} from '@common/class/base.abstract.entities'
-import {Aplications} from '@modules/security/aplications/entities/aplications.entity'
-import {RolePermission} from '@modules/security/role-permission/entities/role-permission.entity'
+import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
+import {RolePermission} from '../../role-permission/entities/role-permission.entity'
+import {Aplications} from '../../aplications/entities/aplications.entity'
 
 @Entity('Permission')
 export class Permission extends BaseEntity {
@@ -11,6 +11,7 @@ export class Permission extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   name: string
 

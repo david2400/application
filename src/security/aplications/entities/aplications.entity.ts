@@ -1,6 +1,6 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
-import {BaseEntity} from '@common/class/base.abstract.entities'
-import {Permission} from '@modules/security/permission/entities/permission.entity'
+import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
+import {Permission} from '../../permission/entities/permission.entity'
 
 @Entity('Aplications')
 export class Aplications extends BaseEntity {

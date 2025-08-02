@@ -1,89 +1,112 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
-import {UpdateResult} from 'typeorm'
-import {RolePermissionRepository} from '@modules/security/role-permission/repository/role-permission.repository'
-import {CreateRolePermissionDto} from '@modules/security/role-permission/dto/create-role-permission.dto'
-import {UpdateRolePermissionDto} from '@modules/security/role-permission/dto/update-role-permission.dto'
+import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common'
+import {Repository} from 'typeorm'
+import {GenericService} from '@/common/services'
+import {RolePermission} from '../entities/role-permission.entity'
+import {InjectRepository} from '@nestjs/typeorm'
+import {RolePermissionInput} from '../dto/role-permission.input'
+import {CreateRolePermissionInput} from '../dto/create-role-permission.input'
+import {UpdateRolePermissionInput} from '../dto/update-role-permission.input'
+import {Mapper} from '@/common/mapper'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
 
 @Injectable()
-export class RolePermissionService {
-  constructor(private rolePermissionRepository: RolePermissionRepository) {}
-
-  async create(rolePermision: CreateRolePermissionDto): Promise<any> {
-    const result = await this.findOneByRoleAndPermision(
-      rolePermision.permission_id,
-      rolePermision.role_id
-    )
-    if (result.length != 0) {
-      throw new HttpException(
-        {message: 'The role has the permission already registered!'},
-        HttpStatus.FOUND
-      )
-    }
-    const newRole = this.rolePermissionRepository.create(rolePermision)
-
-    const results = await this.rolePermissionRepository.save(newRole)
-
-    return results
+export class RolePermissionService extends GenericService<RolePermission, RolePermissionInput> {
+  constructor(
+    @InjectRepository(RolePermission)
+    private readonly rolePermissionRepository: Repository<RolePermission>
+  ) {
+    super(RolePermission, RolePermissionInput)
   }
 
-  async delete(id: number): Promise<UpdateResult> {
-    const result = await this.rolePermissionRepository.softDelete({id: id})
-    if (result.affected === 0) {
-      throw new HttpException(
-        {message: 'The role permission does not exist or could not be deleted!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
-
-    return result
+  protected getRepository(): Repository<RolePermission> {
+    return this.rolePermissionRepository
   }
 
-  async restore(id: number) {
-    const result = await this.rolePermissionRepository.recover({id: id})
+  async createRolePermission(
+    rolePermision: CreateRolePermissionInput
+  ): Promise<RolePermissionInput> {
+    try {
+      const newRole = this.getRepository().create(rolePermision)
 
-    if (result.DeleteAt === undefined) {
-      throw new HttpException(
-        {message: 'The role permission does not exist or could not be restored!'},
-        HttpStatus.NOT_FOUND
-      )
+      const results = await this.getRepository().save(newRole)
+
+      const rolePermisionInput = Mapper.create().entityToDto(results, RolePermissionInput)
+
+      return rolePermisionInput
+    } catch (error) {
+      return error
     }
-
-    return result
   }
 
-  async update(id: number, rolePermision: UpdateRolePermissionDto): Promise<any> {
-    const newRolePermission = await this.findOne(id)
+  // async delete(id: number): Promise<UpdateResultInput> {
+  //   const result = await  this.getRepository().softDelete({id: id})
+  //   if (result.affected === 0) {
+  //     throw new HttpException(
+  //       {message: 'The role permission does not exist or could not be deleted!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
 
-    if (!newRolePermission) {
-      throw new HttpException(
-        {message: 'The role permission does not exist or could not be modify!'},
-        HttpStatus.NOT_FOUND
-      )
+  //   return result
+  // }
+
+  // async restore(id: number) {
+  //   const result = await  this.getRepository().recover({id: id})
+
+  //   if (result.delete_at === undefined) {
+  //     throw new HttpException(
+  //       {message: 'The role permission does not exist or could not be restored!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
+
+  //   return result
+  // }
+
+  async updateRolePermission(
+    id: number,
+    rolePermision: UpdateRolePermissionInput
+  ): Promise<UpdateResultInput> {
+    try {
+      const newRolePermission = await this.getRepository().findOneById(id)
+
+      if (!newRolePermission) {
+        throw new HttpException(
+          {message: 'The role permission does not exist or could not be modify!'},
+          HttpStatus.NOT_FOUND
+        )
+      }
+
+      this.getRepository().merge(newRolePermission, rolePermision)
+
+      const result = await this.getRepository().update(id, newRolePermission)
+
+      if (result.affected === 0) {
+        throw new NotFoundException('motiveDevolution does not exist or could not be modify')
+      }
+
+      return result
+    } catch (error) {
+      return error
     }
-
-    this.rolePermissionRepository.merge(newRolePermission, rolePermision)
-
-    const result = await this.rolePermissionRepository.save(newRolePermission)
-
-    return result
   }
 
   async findOneByRoleAndPermision(idPermission: number, idRole: number) {
-    const rolePermision = await this.rolePermissionRepository.find({
+    const rolePermision = await this.getRepository().find({
       where: {permission: {id: idPermission}, role: {id: idRole}},
     })
     return rolePermision
   }
 
-  async findOne(id: number) {
-    const rolePermision = await this.rolePermissionRepository.findOne({
-      where: {id: id},
-    })
-    return rolePermision
-  }
+  // async findOne(id: number) {
+  //   const rolePermision = await this.getRepository().findOne({
+  //     where: {id: id},
+  //   })
+  //   return rolePermision
+  // }
 
-  async findAll() {
-    const result = await this.rolePermissionRepository.find({withDeleted: true})
-    return result
-  }
+  // async findAll() {
+  //   const result = await  this.getRepository().find({withDeleted: true})
+  //   return result
+  // }
 }

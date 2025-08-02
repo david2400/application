@@ -1,11 +1,9 @@
-import {ApiProperty} from '@nestjs/swagger'
-import {PartialType} from '@nestjs/mapped-types'
 import {IsOptional, IsUUID} from 'class-validator'
-import {CreateRoleDto} from '@modules/security/role/dto/create-role.dto'
+import {CreateRoleInput} from './create-role.input'
+import {PartialType} from '@nestjs/mapped-types'
 
-export class UpdateRoleDto extends PartialType(CreateRoleDto) {
+export class UpdateRoleInput extends PartialType(CreateRoleInput) {
   @IsUUID()
   @IsOptional()
-  @ApiProperty()
   readonly id: number
 }

@@ -1,59 +1,72 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
-import {DeepPartial, UpdateResult} from 'typeorm'
-import {RoleService} from '@modules/security/role/services/role.service'
-import {Profile} from '@modules/security/profile/entities/profile.entity'
-import {CreateProfileDto} from '@modules/security/profile/dto/create-profile.dto'
-import {UpdateProfileDto} from '@modules/security/profile/dto/update-profile.dto'
-import {ProfileRepository} from '@modules/security/profile/repository/profile.repository'
+import {ProfileInput} from '../dto/profile.input'
+import {DeepPartial, Repository, UpdateResult} from 'typeorm'
+import {UpdateProfileInput} from '../dto/update-profile.input'
+import {CreateProfileInput} from '../dto/create-profile.input'
+import {Profile} from '../entities/profile.entity'
+import {InjectRepository} from '@nestjs/typeorm'
+import {GenericService} from '@/common/services'
+import {RoleService} from '../../role/services/role.service'
+import {Mapper} from '@/common/mapper'
 
 @Injectable()
-export class ProfileService {
-  constructor(private profileRepository: ProfileRepository, private roleService: RoleService) {}
+export class ProfileService extends GenericService<Profile, ProfileInput> {
+  constructor(
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
+    private roleService: RoleService
+  ) {
+    super(Profile, ProfileInput)
+  }
 
-  async createProfile(profile: CreateProfileDto): Promise<any> {
+  protected getRepository(): Repository<Profile> {
+    return this.profileRepository
+  }
+
+  async createProfile(profile: CreateProfileInput): Promise<ProfileInput> {
     const results = await this.findOneByName(profile)
     if (results.length != 0) {
       throw new HttpException({message: 'The profile alread  y registered!'}, HttpStatus.FOUND)
     }
-    const newProfile = this.profileRepository.create(profile)
+    const newProfile = this.getRepository().create(profile)
 
     const roles = await this.roleService.findByIds(profile.profile_role)
     if (roles.length == 0 || roles.length < profile.profile_role.length) {
       throw new HttpException({message: 'The roles are not exist!'}, HttpStatus.NOT_FOUND)
     }
-    newProfile.profile_role = roles
+    // newProfile.profile_role = roles
 
-    const result = await this.profileRepository.save(newProfile)
-
-    return result
-  }
-
-  async delete(id: number): Promise<UpdateResult> {
-    const result = await this.profileRepository.softDelete({id: id})
-    if (result.affected === 0) {
-      throw new HttpException(
-        {message: 'The profile does not exist or could not be deleted!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
+    const result = await this.getRepository().save(newProfile)
 
     return result
   }
 
-  async restore(id: number) {
-    const result = await this.profileRepository.recover({id: id})
+  // async delete(id: number): Promise<UpdateResult> {
+  //   const result = await this.getRepository().softDelete({id: id})
+  //   if (result.affected === 0) {
+  //     throw new HttpException(
+  //       {message: 'The profile does not exist or could not be deleted!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
 
-    if (result.DeleteAt === undefined) {
-      throw new HttpException(
-        {message: 'The profile does not exist or could not be restored!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
+  //   return result
+  // }
 
-    return result
-  }
+  // async restore(id: number) {
+  //   const result = await this.getRepository().recover({id: id})
 
-  async updateProfile(id: number, profile: UpdateProfileDto): Promise<any> {
+  //   if (result.delete_at === undefined) {
+  //     throw new HttpException(
+  //       {message: 'The profile does not exist or could not be restored!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
+
+  //   return result
+  // }
+
+  async updateProfile(id: number, profile: UpdateProfileInput): Promise<ProfileInput> {
     const newProfile = await this.findOne(id)
 
     if (!newProfile) {
@@ -71,41 +84,40 @@ export class ProfileService {
       newProfile.profile_role = roles
     }
 
-    this.profileRepository.merge(newProfile, profile)
+    const newProfiles = Mapper.create().entityToDto(newProfile, Profile)
 
-    const result = await this.profileRepository.save(newProfile)
+    this.getRepository().merge(newProfiles, profile)
 
-    return result
+    const result = await this.getRepository().save(newProfile)
+
+    const newResult = Mapper.create().entityToDto(result, ProfileInput)
+
+    return newResult
   }
 
-  async findOneByName(profile: any): Promise<any[]> {
-    const roles = await this.profileRepository.find({
+  async findOneByName(profile: any): Promise<ProfileInput[]> {
+    const roles = await this.getRepository().find({
       where: {name: profile.name},
     })
     return roles
   }
 
-  async findOne(id: number): Promise<Profile> {
-    const profile = await this.profileRepository.findOne({
-      where: {id: id},
-    })
-    return profile
-  }
+  // async findOne(id: number): Promise<ProfileInput> {
+  //   const profile = await this.getRepository().findOne({
+  //     where: {id: id},
+  //   })
+  //   return profile
+  // }
 
-  async findRoleUser(userid: number): Promise<Profile[]> {
-    const user = await this.profileRepository.find({
+  async findRoleUser(userid: number): Promise<ProfileInput[]> {
+    const user = await this.getRepository().find({
       select: {name: true},
     })
     return user
   }
 
-  async findByIds(profile: DeepPartial<Profile[]>) {
-    const result = await this.profileRepository.findByIds(profile)
-    return result
-  }
-
-  async findAll(): Promise<UpdateProfileDto[]> {
-    const result = await this.profileRepository.find({withDeleted: true})
-    return result
-  }
+  // async findAll(): Promise<ProfileInput[]> {
+  //   const result = await this.getRepository().find({withDeleted: true})
+  //   return result
+  // }
 }

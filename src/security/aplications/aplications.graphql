@@ -1,0 +1,24 @@
+type Aplication {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateAplicationInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateAplicationInput {
+  id: Int!
+}
+
+type Query {
+  aplications: [Aplication]!
+  aplication(id: Int!): Aplication
+}
+
+type Mutation {
+  createAplication(createAplicationInput: CreateAplicationInput!): Aplication!
+  updateAplication(updateAplicationInput: UpdateAplicationInput!): Aplication!
+  removeAplication(id: Int!): Aplication
+}

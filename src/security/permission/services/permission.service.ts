@@ -1,88 +1,97 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
-import {UpdateResult} from 'typeorm'
-import {Permission} from '@modules/security/permission/entities/permission.entity'
-import {CreatePermissionDto} from '@modules/security/permission/dto/create-permission.dto'
-import {UpdatePermissionDto} from '@modules/security/permission/dto/update-permission.dto'
-import {PermissionRepository} from '@modules/security/permission/repository/permission.repository'
+import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common'
+import {Permission} from '../entities/permission.entity'
+import {PermissionInput} from '../dto/permission.input'
+import {GenericService} from '@/common/services'
+import {InjectRepository} from '@nestjs/typeorm'
+import {Repository} from 'typeorm'
+import {UpdatePermissionInput} from '../dto/update-permission.input'
+import {CreatePermissionInput} from '../dto/create-permission.input'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
+import {Mapper} from '@/common/mapper'
 
 @Injectable()
-export class PermissionService {
-  constructor(private permissionRepository: PermissionRepository) {}
-
-  async createPermission(permission: CreatePermissionDto): Promise<any> {
-    const result = await this.findOneByRolename(permission)
-
-    if (result.length != 0) {
-      throw new HttpException({message: 'The permission already registered!'}, HttpStatus.FOUND)
-    }
-
-    const newPermission = this.permissionRepository.create(permission)
-
-    const results = await this.permissionRepository.save(newPermission)
-
-    return results
+export class PermissionService extends GenericService<Permission, PermissionInput> {
+  constructor(
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>
+  ) {
+    super(Permission, PermissionInput)
   }
 
-  async delete(id: number): Promise<UpdateResult> {
-    const result = await this.permissionRepository.softDelete({id: id})
-
-    if (result.affected === 0) {
-      throw new HttpException(
-        {message: 'The permission does not exist or could not be deleted!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
-
-    return result
+  protected getRepository(): Repository<Permission> {
+    return this.permissionRepository
   }
 
-  async restore(id: number) {
-    const result = await this.permissionRepository.recover({id: id})
+  async createPermission(permission: CreatePermissionInput): Promise<any> {
+    try {
+      const newPermission = this.getRepository().create(permission)
 
-    if (result.DeleteAt === undefined) {
-      throw new HttpException(
-        {message: 'The permission does not exist or could not be restored!'},
-        HttpStatus.NOT_FOUND
-      )
+      const results = await this.getRepository().save(newPermission)
+
+      const permissionInput = Mapper.create().entityToDto(results, PermissionInput)
+
+      return permissionInput
+    } catch (error) {
+      return error
     }
-
-    return result
   }
 
-  async update(id: number, permission: UpdatePermissionDto): Promise<any> {
-    const newPermission = await this.findOne(id)
+  // async delete(id: number): Promise<UpdateResultDto> {
+  //   const result = await this.getRepository().softDelete({id: id})
 
-    if (!newPermission) {
-      throw new HttpException(
-        {message: 'The permission does not exist or could not be modify!'},
-        HttpStatus.NOT_FOUND
-      )
+  //   if (result.affected === 0) {
+  //     throw new HttpException(
+  //       {message: 'The permission does not exist or could not be deleted!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
+
+  //   return result
+  // }
+
+  // async restore(id: number) {
+  //   const result = await this.getRepository().recover({id: id})
+
+  //   if (result.delete_at === undefined) {
+  //     throw new HttpException(
+  //       {message: 'The permission does not exist or could not be restored!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
+
+  //   return result
+  // }
+
+  async update(id: number, permission: UpdatePermissionInput): Promise<UpdateResultInput> {
+    try {
+      const newPermission = await this.getRepository().findOneById(id)
+
+      if (!newPermission) {
+        throw new HttpException(
+          {message: 'The permission does not exist or could not be modify!'},
+          HttpStatus.NOT_FOUND
+        )
+      }
+
+      this.getRepository().merge(newPermission, permission)
+
+      const result = await this.getRepository().update(id, newPermission)
+
+      if (result.affected === 0) {
+        throw new NotFoundException('motiveDevolution does not exist or could not be modify')
+      }
+
+      return result
+    } catch (error) {
+      return error
     }
-
-    this.permissionRepository.merge(newPermission, permission)
-
-    const result = await this.permissionRepository.save(newPermission)
-
-    return result
   }
 
-  async findOneByRolename(permission: any): Promise<Permission[]> {
-    const permissions = await this.permissionRepository.find({
+  async findOneByRolename(permission: any): Promise<PermissionInput[]> {
+    const permissions = await this.getRepository().find({
       where: {name: permission.name},
     })
 
     return permissions
-  }
-
-  async findOne(id: number): Promise<Permission> {
-    const permission = await this.permissionRepository.findOne({
-      where: {id: id},
-    })
-    return permission
-  }
-
-  async findAll(): Promise<Permission[]> {
-    const result = await this.permissionRepository.find({withDeleted: true})
-    return result
   }
 }

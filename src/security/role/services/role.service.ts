@@ -1,80 +1,103 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
-import {DeepPartial, UpdateResult} from 'typeorm'
-import {RoleRepository} from '@modules/security/role/repository/role.repository'
-import {Role} from '@modules/security/role/entities/role.entity'
-import {CreateRoleDto} from '@modules/security/role/dto/create-role.dto'
-import {UpdateRoleDto} from '@modules/security/role/dto/update-role.input'
+import {CreateRoleInput} from '../dto/create-role.input'
+import {UpdateRoleInput} from '../dto/update-role.input'
+import {DeepPartial, Repository, UpdateResult} from 'typeorm'
+import {Role} from '../entities/role.entity'
+import {RoleInput} from '../dto/role.input'
+import {GenericService} from '@/common/services'
+import {InjectRepository} from '@nestjs/typeorm'
+import {Mapper} from '@/common/mapper'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
 
 @Injectable()
-export class RoleService {
-  constructor(private roleRepository: RoleRepository) {}
-
-  async createRole(role: CreateRoleDto): Promise<any> {
-    const result = await this.findOneByRolename(role)
-    if (result.length != 0) {
-      throw new HttpException({message: 'The role already registered!'}, HttpStatus.FOUND)
-    }
-    const newRole = this.roleRepository.create(role)
-
-    const results = await this.roleRepository.save(newRole)
-
-    return results
+export class RoleService extends GenericService<Role, RoleInput> {
+  constructor(
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>
+  ) {
+    super(Role, RoleInput)
   }
 
-  async delete(id: number): Promise<UpdateResult> {
-    const result = await this.roleRepository.softDelete({id: id})
-    if (result.affected === 0) {
-      throw new HttpException(
-        {message: 'The role does not exist or could not be deleted!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
-
-    return result
+  protected getRepository(): Repository<Role> {
+    return this.roleRepository
   }
 
-  async restore(id: number) {
-    const result = await this.roleRepository.recover({id: id})
-    if (result.DeleteAt === undefined) {
-      throw new HttpException(
-        {message: 'The role does not exist or could not be restored!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
+  async createRole(role: CreateRoleInput): Promise<RoleInput> {
+    try {
+      const result = await this.findOneByRolename(role)
+      if (result.length != 0) {
+        throw new HttpException({message: 'The role already registered!'}, HttpStatus.FOUND)
+      }
+      const newRole = this.getRepository().create(role)
 
-    return result
+      const results = await this.getRepository().save(newRole)
+
+      const roleInput = Mapper.create().entityToDto(results, RoleInput)
+
+      return roleInput
+    } catch (error) {
+      return error
+    }
   }
 
-  async update(id: number, role: UpdateRoleDto): Promise<UpdateResult> {
-    const newRole = this.roleRepository.create(role)
-    const result = await this.roleRepository.update(id, newRole)
-    if (result.affected === 0) {
-      throw new HttpException(
-        {message: 'The role does not exist or could not be modify!'},
-        HttpStatus.NOT_FOUND
-      )
-    }
+  // async delete(id: number): Promise<UpdateResult> {
+  //   const result = await this.getRepository().softDelete({id: id})
+  //   if (result.affected === 0) {
+  //     throw new HttpException(
+  //       {message: 'The role does not exist or could not be deleted!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
 
-    return result
+  //   return result
+  // }
+
+  // async restore(id: number) {
+  //   const result = await this.getRepository().recover({id: id})
+  //   if (result.delete_at === undefined) {
+  //     throw new HttpException(
+  //       {message: 'The role does not exist or could not be restored!'},
+  //       HttpStatus.NOT_FOUND
+  //     )
+  //   }
+
+  //   return result
+  // }
+
+  async updateRole(id: number, role: UpdateRoleInput): Promise<UpdateResultInput> {
+    try {
+      const newRole = this.getRepository().create(role)
+      const result = await this.getRepository().update(id, newRole)
+      if (result.affected === 0) {
+        throw new HttpException(
+          {message: 'The role does not exist or could not be modify!'},
+          HttpStatus.NOT_FOUND
+        )
+      }
+
+      return result
+    } catch (error) {
+      return error
+    }
   }
 
   async findOneByRolename(role: any) {
-    const roles = await this.roleRepository.find({
+    const roles = await this.getRepository().find({
       where: {name: role.name},
     })
 
     return roles
   }
 
-  async findOne(id: number) {
-    const role = await this.roleRepository.findOne({
-      where: {id: id},
-    })
-    return role
-  }
+  // async findOne(id: number) {
+  //   const role = await this.getRepository().findOne({
+  //     where: {id: id},
+  //   })
+  //   return role
+  // }
 
   // async findRoleUser(userid: number): Promise<any[]> {
-  //   const user = await this.roleRepository.findWithRelations({
+  //   const user = await this.getRepository().findWithRelations({
   //     select: {name: true},
   //     relations: {
   //       permission: true,
@@ -84,13 +107,13 @@ export class RoleService {
   //   return user
   // }
 
-  async findByIds(roles: DeepPartial<Role[]>) {
-    const result = await this.roleRepository.findByIds(roles)
-    return result
-  }
+  // async findByIds(roles: DeepPartial<RoleInput[]>) {
+  //   const result = await this.getRepository().findByIds(roles)
+  //   return result
+  // }
 
-  async findAll() {
-    const result = await this.roleRepository.find({withDeleted: true})
-    return result
-  }
+  // async findAll() {
+  //   const result = await this.getRepository().find({withDeleted: true})
+  //   return result
+  // }
 }

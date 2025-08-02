@@ -1,7 +1,7 @@
 import {Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
-import {BaseEntity} from '@common/class/base.abstract.entities'
-import {Role} from '@modules/security/role/entities/role.entity'
-import {User} from '@modules/account/user/entities/user.entity'
+import {Role} from '../../role/entities/role.entity'
+import {User} from '@/src/account/users/entities/user.entity'
+import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
 
 @Entity('Profile')
 export class Profile extends BaseEntity {
