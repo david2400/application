@@ -1,4 +1,4 @@
-import type {Config, Default, Objectype, Production} from '@/common/type/config.type'
+import {Config, Default, Objectype, Production} from '@/common/interfaces/config/config.interface'
 
 const util = {
   isObject<T>(value: T): value is T & Objectype {

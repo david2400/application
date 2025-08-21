@@ -2,10 +2,12 @@ import {Module} from '@nestjs/common'
 import {TypeOrmModule, TypeOrmModuleOptions} from '@nestjs/typeorm'
 import {ConfigModule, ConfigService} from '@nestjs/config'
 import {configuration} from '@config/configuration'
+import { GraphqlModule } from './graphql'
 // import {MailerConfigsModule} from '@config/mailer/mailer.config'
 
 @Module({
   imports: [
+    GraphqlModule,
     // MailerConfigsModule,
     ConfigModule.forRoot({
       isGlobal: true,

@@ -94,22 +94,4 @@ export class ModulesAplicationsService extends GenericService<
     }
   }
 
-  // async findOneByRoleAndPermision(idPermission: number, idRole: number) {
-  //   const rolePermision = await this.getRepository().find({
-  //     where: {permission: {id: idPermission}, role: {id: idRole}},
-  //   })
-  //   return rolePermision
-  // }
-
-  // async findOne(id: number) {
-  //   const rolePermision = await this.getRepository().findOne({
-  //     where: {id: id},
-  //   })
-  //   return rolePermision
-  // }
-
-  // async findAll() {
-  //   const result = await  this.getRepository().find({withDeleted: true})
-  //   return result
-  // }
 }

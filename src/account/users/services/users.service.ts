@@ -1,11 +1,12 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectRepository} from '@nestjs/typeorm'
 import {User} from '../entities/user.entity'
-import {CreateUserInput} from '../dto/create-user.input'
 import {UserInput} from '../dto/user.input'
-import {UpdateUserInput} from '../dto/update-user.input'
 import {Repository} from 'typeorm'
 import {GenericService} from '@/common/services'
+import {CreateUserInput} from '../dto/create-user.input'
+import {UpdateUserInput} from '../dto/update-user.input'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
 
 @Injectable()
 export class UsersService extends GenericService<User, UserInput> {
@@ -16,33 +17,32 @@ export class UsersService extends GenericService<User, UserInput> {
     super(User, UserInput)
   }
 
-  protected getRepository(): Repository<User> {
-    return this.userRepository
+    protected getRepository(): Repository<User> {
+      return this.userRepository
+    }
+
+  async createUser(user: CreateUserInput) {
+    const result = await this.findOneByEmail(user.email) // || (await this.findOneByUsername(user.username))
+    if (result != null) {
+      throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
+    }
+    const newUser = this.getRepository().create(user)
+
+    const results = await this.getRepository().save(newUser)
+    // const sendEmail = await this.sendEmail()
+
+    return results
   }
 
-  // async createUser(user: CreateUserInput) {
-  //   const result =
-  //     (await this.findOneByEmail(user.email)) || (await this.findOneByUsername(user.username))
-  //   if (result != null) {
-  //     throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
+  //   async findOneByUsername(username: string): Promise<UserInput> {
+  //     const user = await this.getRepository().findOne({
+  //       relations: {
+  //         profile: true,
+  //       },
+  //       where: {username: username},
+  //     })
+  //     return user
   //   }
-  //   const newUser = this.getRepository().create(user)
-
-  //   const results = await this.getRepository().save(newUser)
-  //   // const sendEmail = await this.sendEmail()
-
-  //   return results
-  // }
-
-  // async findOneByUsername(username: string): Promise<UserInput> {
-  //   const user = await this.getRepository().findOne({
-  //     relations: {
-  //       profile: true,
-  //     },
-  //     where: {username: username},
-  //   })
-  //   return user
-  // }
 
   async findOneByEmail(email: string): Promise<any> {
     const user = await this.getRepository().findOne({
@@ -63,7 +63,7 @@ export class UsersService extends GenericService<User, UserInput> {
 
   async removeRefreshToken(user_id: number): Promise<any> {
     const result = await this.getRepository().update(
-      {id: user_id},
+      {id_user: user_id},
       {
         refresh_token: null,
       }
@@ -77,7 +77,7 @@ export class UsersService extends GenericService<User, UserInput> {
     return result
   }
 
-  async updateUser(id: number, user: UpdateUserInput) {
+  async updateUser(id: number, user: UpdateUserInput): Promise<UpdateResultInput> {
     const newUser = await this.getRepository().findOneById(id)
     if (!newUser) {
       throw new HttpException(
@@ -97,7 +97,7 @@ export class UsersService extends GenericService<User, UserInput> {
     const hashRefreshToken = refreshToken
 
     const result = await this.userRepository.update(
-      {id: user_id},
+      {id_user: user_id},
       {
         refresh_token: hashRefreshToken,
       }

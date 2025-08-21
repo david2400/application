@@ -11,20 +11,20 @@ export class BaseDto {
   @IsOptional()
   @IsNumber()
   @HideField()
-  updated_usr: number
+  updated_usr?: number
 
   @IsOptional()
   @IsDate()
   @HideField()
-  readonly created_at: Date
+  readonly created_at?: Date
 
   @IsOptional()
   @IsDate()
   @HideField()
-  readonly updated_at: Date
+  readonly updated_at?: Date
 
   @IsOptional()
   @IsDate()
   @HideField()
-  readonly deleted_at: Date
+  readonly deleted_at?: Date
 }

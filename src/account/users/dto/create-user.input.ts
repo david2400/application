@@ -1,37 +1,19 @@
 import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
-import { InputType } from '@nestjs/graphql'
+import {Field, InputType} from '@nestjs/graphql'
 import {IsEmail, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString} from 'class-validator'
 
 @InputType()
 export class CreateUserInput extends BaseDto {
   @IsString()
-  @IsNotEmpty()
-  name: string
+  @Field(() => String)
+  username
 
   @IsString()
-  @IsNotEmpty()
-  last_name: string
-
-  @IsNumberString()
-  card_id: string
-
-  @IsEmail()
-  email: string
-
-  @IsString()
-  gender: string
-
-  @IsString()
-  address: string
-
-  @IsNumberString()
-  phone: string
-
-  @IsOptional()
-  @IsString()
-  refresh_token?: string
+  // @isStrongPassword()
+  @Field(() => String)
+  password
 
   @IsNumber()
-  @IsOptional()
-  profile_id: number
+  @Field(() => Number)
+  client_id: number
 }

@@ -1,16 +1,36 @@
-import {ApiProperty} from '@nestjs/swagger'
-import {PartialType} from '@nestjs/mapped-types'
-import {DeepPartial} from 'typeorm'
-import {IsArray, IsOptional, ValidateNested} from 'class-validator'
-import {UpdateAplicationsInput} from '@/src/security/aplications/dto/update-aplication.input'
+import {IsArray, IsNumber, IsOptional, IsString, ValidateNested} from 'class-validator'
+import {Field, ObjectType} from '@nestjs/graphql'
+import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
 import {PermissionInput} from '../../permission/dto/permission.input'
-import {InputType, ObjectType} from '@nestjs/graphql'
+import {ModulesAplicationInput} from '../../modules-aplications/dto/modules-aplication.input'
 
 @ObjectType()
-export class AplicationsInput extends PartialType(UpdateAplicationsInput) {
+export class AplicationsInput extends BaseDto {
+  @IsNumber()
+  @Field(() => Number)
+  readonly id_aplications: number
+
+  @IsString()
+  @Field(() => String)
+  name: string
+
+  @IsString()
+  @Field(() => String)
+  description?: string
+
+  @IsString()
+  @Field(() => String)
+  route: string
+
   @ValidateNested()
   @IsArray()
   @IsOptional()
-  @ApiProperty()
-  permission: DeepPartial<PermissionInput[]>
+  // @Field(() => [PermissionInput])
+  permission?: PermissionInput[]
+
+  @ValidateNested()
+  @IsArray()
+  @IsOptional()
+  // @Field(() => [ModulesAplicationInput])
+  modules_aplication?: ModulesAplicationInput[]
 }

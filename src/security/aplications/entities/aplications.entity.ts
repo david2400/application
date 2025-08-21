@@ -7,16 +7,23 @@ import {Field, Int, ObjectType} from '@nestjs/graphql'
 @Entity('Aplications')
 @ObjectType()
 export class Aplications extends BaseEntity {
-  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id'})
-  @Field(() => Int)
+  @PrimaryGeneratedColumn({type: 'int', unsigned: true, name: 'id_aplications'})
+  @Field(() => Number)
   id_aplications: number
 
   @Column({
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   @Field(() => String)
   name: string
+
+  @Column({
+    type: 'text',
+  })
+  @Field(() => String)
+  description?: string
 
   @Column({
     type: 'varchar',
@@ -25,20 +32,15 @@ export class Aplications extends BaseEntity {
   @Field(() => String)
   route: string
 
-  @Column({
-    type: 'varchar',
-  })
-  @Field(() => String)
-  description: string
-
   @OneToMany(() => Permission, (permission) => permission.aplications, {
     lazy: true,
   })
-  permission: Permission[]
+  // @Field(() => [Permission])
+  permission?: Permission[]
 
   @OneToMany(() => ModulesAplication, (modules) => modules.aplications, {
-    eager: true,
     lazy: true,
   })
-  modules_aplication: ModulesAplication[]
+  // @Field(() => [ModulesAplication])
+  modules_aplication?: ModulesAplication[]
 }

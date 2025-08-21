@@ -1,16 +1,34 @@
-import {ApiProperty} from '@nestjs/swagger'
-import {PartialType} from '@nestjs/mapped-types'
 import {DeepPartial} from 'typeorm'
-import {IsArray, IsOptional, ValidateNested} from 'class-validator'
+import {IsArray, IsOptional, IsString, IsUUID, ValidateNested} from 'class-validator'
 import {RolePermissionInput} from '../../role-permission/dto/role-permission.input'
-import {UpdateRoleInput} from './update-role.input'
-import { ObjectType } from '@nestjs/graphql'
+import {Field, Int, ObjectType} from '@nestjs/graphql'
+import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
+import {ProfileInput} from '../../../account/profile/dto/profile.input'
 
 @ObjectType()
-export class RoleInput extends PartialType(UpdateRoleInput) {
+export class RoleInput extends BaseDto {
+  @IsUUID()
+  @IsOptional()
+  @Field(() => Number)
+  readonly id_role: number
+
+  @IsString()
+  @Field(() => String)
+  name: string
+
+  @IsString()
+  @Field(() => String)
+  description: string
+
   @ValidateNested()
   @IsArray()
   @IsOptional()
-  @ApiProperty()
-  role_permission?: DeepPartial<RolePermissionInput[]>
+  // @Field(() => [ProfileInput], {nullable: true})
+  role_profile?: ProfileInput[]
+
+  @ValidateNested()
+  @IsArray()
+  @IsOptional()
+  // @Field(() => [RolePermissionInput], {nullable: true})
+  role_permission?: RolePermissionInput[]
 }

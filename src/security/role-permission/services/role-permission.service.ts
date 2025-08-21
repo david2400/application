@@ -26,42 +26,20 @@ export class RolePermissionService extends GenericService<RolePermission, RolePe
     rolePermision: CreateRolePermissionInput
   ): Promise<RolePermissionInput> {
     try {
-      const newRole = this.getRepository().create(rolePermision)
+      const newRole: RolePermission = this.getRepository().create(rolePermision)
 
-      const results = await this.getRepository().save(newRole)
+      const results: RolePermission = await this.getRepository().save(newRole)
 
-      const rolePermisionInput = Mapper.create().entityToDto(results, RolePermissionInput)
+      const rolePermisionInput: RolePermissionInput = Mapper.create().entityToDto(
+        results,
+        RolePermissionInput
+      )
 
       return rolePermisionInput
     } catch (error) {
       return error
     }
   }
-
-  // async delete(id: number): Promise<UpdateResultInput> {
-  //   const result = await  this.getRepository().softDelete({id: id})
-  //   if (result.affected === 0) {
-  //     throw new HttpException(
-  //       {message: 'The role permission does not exist or could not be deleted!'},
-  //       HttpStatus.NOT_FOUND
-  //     )
-  //   }
-
-  //   return result
-  // }
-
-  // async restore(id: number) {
-  //   const result = await  this.getRepository().recover({id: id})
-
-  //   if (result.delete_at === undefined) {
-  //     throw new HttpException(
-  //       {message: 'The role permission does not exist or could not be restored!'},
-  //       HttpStatus.NOT_FOUND
-  //     )
-  //   }
-
-  //   return result
-  // }
 
   async updateRolePermission(
     id: number,
@@ -90,23 +68,4 @@ export class RolePermissionService extends GenericService<RolePermission, RolePe
       return error
     }
   }
-
-  // async findOneByRoleAndPermision(idPermission: number, idRole: number) {
-  //   const rolePermision = await this.getRepository().find({
-  //     where: {permission: {id: idPermission}, role: {id: idRole}},
-  //   })
-  //   return rolePermision
-  // }
-
-  // async findOne(id: number) {
-  //   const rolePermision = await this.getRepository().findOne({
-  //     where: {id: id},
-  //   })
-  //   return rolePermision
-  // }
-
-  // async findAll() {
-  //   const result = await  this.getRepository().find({withDeleted: true})
-  //   return result
-  // }
 }

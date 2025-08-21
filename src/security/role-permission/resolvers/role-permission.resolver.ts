@@ -1,11 +1,11 @@
 import {Resolver, Query, Mutation, Args} from '@nestjs/graphql'
 import {CreateRolePermissionInput} from '../dto/create-role-permission.input'
-import {UpdateRolePermissionInput} from '../dto/update-role-permission.input'
 import {RolePermissionService} from '../services/role-permission.service'
 import {RolePermissionInput} from '../dto/role-permission.input'
-import {UpdateResult} from 'typeorm'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
+import {RolePermission} from '../entities/role-permission.entity'
 
-@Resolver('RolePermission')
+@Resolver(() => RolePermission)
 export class RolePermissionResolver {
   constructor(private readonly rolePermissionService: RolePermissionService) {}
 
@@ -13,31 +13,31 @@ export class RolePermissionResolver {
   async createRolePermission(
     @Args('rolePermission') createRolePermissionInput: CreateRolePermissionInput
   ) {
-    return this.rolePermissionService.createRolePermission(createRolePermissionInput)
+    return await this.rolePermissionService.createRolePermission(createRolePermissionInput)
   }
 
   @Query(() => [RolePermissionInput])
   async findAllRolePermission() {
-    return this.rolePermissionService.findAll()
+    return await this.rolePermissionService.findAll()
   }
 
   @Query(() => RolePermissionInput)
   async findOneRolePermission(@Args('id') id: number) {
-    return this.rolePermissionService.findOne(id)
+    return await this.rolePermissionService.findOne(id)
   }
 
-  @Mutation(() => UpdateResult)
-  async updateRolePermission(
-    @Args('rolePermission') updateRolePermissionInput: UpdateRolePermissionInput
-  ) {
-    return this.rolePermissionService.updateRolePermission(
-      updateRolePermissionInput.id,
-      updateRolePermissionInput
-    )
-  }
+  // @Mutation(() => UpdateResultInput)
+  // async updateRolePermission(
+  //   @Args('rolePermission') updateRolePermissionInput: UpdateRolePermissionInput
+  // ) {
+  //   return await this.rolePermissionService.updateRolePermission(
+  //     updateRolePermissionInput.,
+  //     updateRolePermissionInput
+  //   )
+  // }
 
-  @Mutation('removeRolePermission')
+  @Mutation(() => UpdateResultInput)
   async removeRolePermission(@Args('id') id: number) {
-    return this.rolePermissionService.deleteById(id)
+    return await this.rolePermissionService.deleteById(id)
   }
 }

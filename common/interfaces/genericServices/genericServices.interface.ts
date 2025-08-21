@@ -1,4 +1,4 @@
-import {UpdateResultInput} from '../domain/dto/update-result.dto'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
 
 export interface IGenericServices<D> {
   deleteById(id: number): Promise<UpdateResultInput>

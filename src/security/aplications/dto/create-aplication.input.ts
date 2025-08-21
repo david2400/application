@@ -1,22 +1,20 @@
 import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
-import { InputType } from '@nestjs/graphql'
-import {ApiProperty} from '@nestjs/swagger'
-import {IsNotEmpty, IsString} from 'class-validator'
+import {Field, InputType} from '@nestjs/graphql'
+import {IsNotEmpty, IsOptional, IsString} from 'class-validator'
 
 @InputType()
 export class CreateAplicationsInput extends BaseDto {
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  @Field(() => String)
   name: string
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  description: string
+  @Field(() => String)
+  description?: string
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  @Field(() => String)
   route: string
 }

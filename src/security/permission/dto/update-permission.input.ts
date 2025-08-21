@@ -1,11 +1,12 @@
-import {IsOptional, IsUUID} from 'class-validator'
+import {IsNotEmpty, IsNumber, IsOptional, IsUUID} from 'class-validator'
 import {CreatePermissionInput} from './create-permission.input'
 import {PartialType} from '@nestjs/mapped-types'
-import { InputType } from '@nestjs/graphql'
+import {Field, ID, InputType} from '@nestjs/graphql'
 
 @InputType()
 export class UpdatePermissionInput extends PartialType(CreatePermissionInput) {
-  @IsUUID()
-  @IsOptional()
-  readonly id: number
+  @IsNumber()
+  @IsNotEmpty()
+  @Field(() => Number)
+  readonly id_permission: number
 }

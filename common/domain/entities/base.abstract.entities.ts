@@ -13,14 +13,14 @@ export class BaseEntity {
     type: 'bigint',
     nullable: false,
   })
-  @Field(() => Int)
+  @Field(() => Number)
   created_usr: number
 
   @Column({
     type: 'bigint',
     nullable: false,
   })
-  @Field(() => Int)
+  @Field(() => Number)
   updated_usr: number
 
   @CreateDateColumn({

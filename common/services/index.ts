@@ -14,12 +14,13 @@ import {
 import {Mapper} from '../mapper'
 import {IGenericServices} from '../interfaces/genericServices/genericServices.interface'
 import {UpdateResultInput} from '../domain/dto/update-result.input'
-// import {Mapper} from '../mapper'
 
 @Injectable()
 export abstract class GenericService<T, D> implements IGenericServices<D> {
   @Inject(DataSource)
   protected readonly dataSource: DataSource
+
+  // protected readonly logger = new Logger(this.constructor.name)
 
   constructor(
     @Inject(DataSource)
@@ -30,26 +31,33 @@ export abstract class GenericService<T, D> implements IGenericServices<D> {
   protected abstract getRepository(): Repository<T>
 
   getPrimaryGeneratedColumnName(): string | undefined {
-    const metadata = this.dataSource.getMetadata(this.entityClass)
-
-    // Encuentra la columna primaria generada
-    const primaryGeneratedColumn = metadata.columns.find(
-      (column) => column.isPrimary && column.isGenerated
-    )
-
-    return primaryGeneratedColumn?.databaseName // <-- Nombre en la base de datos
+    try {
+      const metadata = this.dataSource.getMetadata(this.entityClass)
+      const primaryGeneratedColumn = metadata.columns.find(
+        (column) => column.isPrimary && column.isGenerated
+      )
+      return primaryGeneratedColumn?.databaseName
+    } catch (error) {
+      throw new HttpException(
+        'Error getting primary column information',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      )
+    }
   }
 
   async deleteById(id: number): Promise<UpdateResultInput> {
     try {
       const column = this.getPrimaryGeneratedColumnName()
-      const where = {[column]: id} as FindOptionsWhere<T>
+      if (!column) {
+        throw new HttpException('Primary column not found', HttpStatus.INTERNAL_SERVER_ERROR)
+      }
 
+      const where = {[column]: id} as FindOptionsWhere<T>
       const result: UpdateResult = await this.getRepository().softDelete(where)
 
       if (result.affected === 0) {
         throw new HttpException(
-          'MotiveDevolution does not exist or could not be deleted!',
+          'Entity does not exist or could not be deleted!',
           HttpStatus.NOT_FOUND
         )
       }
@@ -62,42 +70,58 @@ export abstract class GenericService<T, D> implements IGenericServices<D> {
   async restoreById(id: number): Promise<D> {
     try {
       const column = this.getPrimaryGeneratedColumnName()
-      const entity = {[column]: id} as DeepPartial<T>
+      if (!column) {
+        throw new HttpException('Primary column not found', HttpStatus.INTERNAL_SERVER_ERROR)
+      }
 
+      const entity = {[column]: id} as DeepPartial<T>
       const result: T = await this.getRepository().recover(entity)
 
       if (!result) {
         throw new HttpException(
-          {message: 'Register does not exist or could not be restored!'},
+          {message: 'Entity does not exist or could not be restored!'},
           HttpStatus.NOT_FOUND
         )
       }
 
-      const newResult: D = Mapper.create().entityToDto(result, this.dtoClass)
-
-      return newResult
+      return Mapper.create().entityToDto(result, this.dtoClass)
     } catch (error) {
       return error
     }
   }
 
   async findOne(id: number): Promise<D> {
-    const column = this.getPrimaryGeneratedColumnName()
-    const entity = await this.getRepository().findOne({
-      where: {[column]: id} as FindOptionsWhere<T>,
-    })
+    try {
+      const column = this.getPrimaryGeneratedColumnName()
+      if (!column) {
+        throw new HttpException('Primary column not found', HttpStatus.INTERNAL_SERVER_ERROR)
+      }
 
-    const newResult: D = Mapper.create().entityToDto(entity, this.dtoClass)
+      const entity = await this.getRepository().findOne({
+        where: {[column]: id} as FindOptionsWhere<T>,
+      })
 
-    return newResult
+      if (!entity) {
+        throw new HttpException('Entity not found', HttpStatus.NOT_FOUND)
+      }
+
+      return Mapper.create().entityToDto(entity, this.dtoClass)
+    } catch (error) {
+      return error
+    }
   }
 
-  async findByIds(entity: DeepPartial<D[]>): Promise<D[]> {
-    const result = await this.getRepository().findByIds(entity)
+  async findByIds(ids: number[]): Promise<D[]> {
+    try {
+      if (!ids || ids.length === 0) {
+        return []
+      }
 
-    const newResult: D[] = Mapper.create().convertToListDto(result, this.dtoClass)
-
-    return newResult
+      const result = await this.getRepository().findByIds(ids)
+      return Mapper.create().convertToListDto(result, this.dtoClass)
+    } catch (error) {
+      return error
+    }
   }
 
   //   async getAllPaginable(
@@ -116,10 +140,11 @@ export abstract class GenericService<T, D> implements IGenericServices<D> {
   //   }
 
   async findAll(): Promise<D[]> {
-    const result = await this.getRepository().find({withDeleted: true})
-
-    const newResult: D[] = Mapper.create().convertToListDto(result, this.dtoClass)
-
-    return newResult
+    try {
+      const result = await this.getRepository().find({withDeleted: true})
+      return Mapper.create().convertToListDto(result, this.dtoClass)
+    } catch (error) {
+      return error
+    }
   }
 }

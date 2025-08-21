@@ -1,0 +1,73 @@
+# .cursorrules
+
+# Reglas para Nest.js con GraphQL y buenas prácticas
+
+---
+
+description: Estructura y generación de resolvers GraphQL
+globs: ["src/**/*.resolver.ts"]
+alwaysApply: true
+rules:
+
+- Al crear resolvers:
+  - Cada resolver debe estar en un archivo separado con el nombre del recurso (`user.resolver.ts`).
+  - Usar `@Resolver(() => EntityName)` para vincularlo a la entidad correspondiente.
+  - Separar consultas (`@Query`) y mutaciones (`@Mutation`) claramente.
+  - Delegar la lógica de negocio a servicios, no en el resolver.
+  - Manejar errores con excepciones de Nest.js (`BadRequestException`, `NotFoundException`, etc.).
+  - Usar `@Args` con tipos explícitos y DTOs validados.
+  - Evitar cargar demasiada lógica en un solo resolver; dividir por dominio.
+
+---
+
+description: Definición de esquemas y tipos GraphQL
+globs: ["src/**/*.input.ts"]
+alwaysApply: true
+rules:
+
+- Los modelos GraphQL deben usar `@ObjectType()` y `@Field()` con tipos explícitos.
+- Los DTOs de entrada deben usar `@InputType()` y tener validaciones de `class-validator`.
+- Nunca devolver directamente entidades de base de datos sin un modelo GraphQL intermedio.
+- Usar `nullable` en `@Field()` solo si el valor puede ser opcional.
+- Respetar el snake_case para nombres de tipos GraphQL.
+
+---
+
+description: Buenas prácticas en consultas y mutaciones
+globs: ["src/**/*.resolver.ts"]
+alwaysApply: true
+rules:
+
+- Usar paginación en consultas que devuelvan listas grandes (`limit`, `offset` o `cursor`).
+- Implementar filtros usando DTOs de entrada (`@Args('filter', { type: () => FilterInput })`).
+- Para relaciones, usar `@ResolveField()` en lugar de incluir datos en la misma consulta cuando sea costoso.
+- Implementar DataLoader para evitar problemas de N+1 queries.
+- En mutaciones, devolver siempre el objeto creado/actualizado, no solo un booleano.
+
+---
+
+description: Estilo y consistencia
+globs: ["src/**/*.ts"]
+alwaysApply: true
+rules:
+
+- Ordenar decoradores de GraphQL de forma coherente: primero `@ObjectType/@InputType`, luego `@Field`.
+- Usar nombres descriptivos en queries y mutations (`getUserById`, `createOrder`).
+- Nombrar los DTOs con sufijos `Input` para entradas y `Output` o `Model` para salidas.
+- No mezclar queries y mutations en el mismo método.
+- Respetar la estructura `/modules/<nombre>/` para agrupar modelos, resolvers y servicios.
+
+---
+
+description: Autenticación y autorización en GraphQL
+globs: ["src/**/*.resolver.ts"]
+alwaysApply: true
+rules:
+
+- Proteger resolvers con `@UseGuards(GqlAuthGuard)` para autenticación JWT.
+- Implementar autorización por roles con `@Roles()` y un guard personalizado.
+- No exponer campos sensibles en el esquema GraphQL.
+- Usar `@CurrentUser()` (decorador personalizado) para obtener el usuario logueado.
+- Validar que el usuario tenga permisos para acceder a datos específicos.
+
+

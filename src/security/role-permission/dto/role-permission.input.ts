@@ -1,12 +1,27 @@
-import {PartialType} from '@nestjs/mapped-types'
 import {PermissionInput} from '../../permission/dto/permission.input'
 import {RoleInput} from '../../role/dto/role.input'
-import {UpdateRolePermissionInput} from './update-role-permission.input'
-import { ObjectType } from '@nestjs/graphql'
+import {Field, Int, ObjectType} from '@nestjs/graphql'
+import {IsNumber, IsString} from 'class-validator'
+import {BaseDto} from '@/common/domain/dto/base.abstract.dto'
+import {DeepPartial} from 'typeorm'
 
 @ObjectType()
-export class RolePermissionInput extends PartialType(UpdateRolePermissionInput) {
-  permission: PermissionInput
+export class RolePermissionInput extends BaseDto {
+  @IsString()
+  @Field(() => String)
+  level: string
 
-  role: RoleInput
+  @IsNumber()
+  @Field(() => Number)
+  permission_id: number
+
+  // @Field(() => PermissionInput, {nullable: true})
+  permission: DeepPartial<PermissionInput>
+
+  @IsNumber()
+  @Field(() => Number)
+  role_id: number
+
+  // @Field(() => RoleInput, {nullable: true})
+  role: DeepPartial<RoleInput>
 }

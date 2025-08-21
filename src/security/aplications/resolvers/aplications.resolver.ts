@@ -10,31 +10,35 @@ import {AplicationsService} from '../services/aplications.service'
 export class AplicationsResolver {
   constructor(private readonly aplicationsService: AplicationsService) {}
 
-  @Mutation(() => CreateAplicationsInput)
-  async createAplications(@Args() createAplicationInput: CreateAplicationsInput) {
-    return this.aplicationsService.createAplication(createAplicationInput)
+  @Mutation(() => AplicationsInput)
+  async createAplications(
+    @Args('aplication') createAplicationInput: CreateAplicationsInput
+  ): Promise<AplicationsInput> {
+    return await this.aplicationsService.createAplication(createAplicationInput)
   }
 
   @Query(() => [AplicationsInput])
-  async findAllAplications() {
-    return this.aplicationsService.findAll()
+  async findAllAplications(): Promise<AplicationsInput[]> {
+    return await this.aplicationsService.findAll()
   }
 
   @Query(() => AplicationsInput)
-  async findOneAplications(@Args('id') id: number) {
-    return this.aplicationsService.findOne(id)
+  async findOneAplications(@Args('id') id: number): Promise<AplicationsInput> {
+    return await this.aplicationsService.findOne(id)
   }
 
   @Mutation(() => UpdateResultInput)
-  async updateAplications(@Args() updateAplicationInput: UpdateAplicationsInput) {
-    return this.aplicationsService.update(
+  async updateAplications(
+    @Args('aplication') updateAplicationInput: UpdateAplicationsInput
+  ): Promise<UpdateResultInput> {
+    return await this.aplicationsService.updateAplication(
       updateAplicationInput.id_aplications,
       updateAplicationInput
     )
   }
 
   @Mutation(() => UpdateResultInput)
-  async removeAplications(@Args('id') id: number) {
-    return this.aplicationsService.deleteById(id)
+  async removeAplications(@Args('id') id: number): Promise<UpdateResultInput> {
+    return await this.aplicationsService.deleteById(id)
   }
 }

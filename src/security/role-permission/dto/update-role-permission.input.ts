@@ -1,8 +1,7 @@
 import {PartialType} from '@nestjs/mapped-types'
 import {CreateRolePermissionInput} from './create-role-permission.input'
-import {InputType} from '@nestjs/graphql'
+import {Field, ID, InputType} from '@nestjs/graphql'
+import {IsNotEmpty, IsNumber} from 'class-validator'
 
 @InputType()
-export class UpdateRolePermissionInput extends PartialType(CreateRolePermissionInput) {
-  id: number
-}
+export class UpdateRolePermissionInput extends PartialType(CreateRolePermissionInput) {}

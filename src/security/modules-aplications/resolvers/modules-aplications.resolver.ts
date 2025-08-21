@@ -2,40 +2,45 @@ import {Resolver, Query, Mutation, Args} from '@nestjs/graphql'
 import {CreateModulesAplicationInput} from '../dto/create-modules-aplication.input'
 import {UpdateModulesAplicationInput} from '../dto/update-modules-aplication.input'
 import {ModulesAplicationsService} from '../services/modules-aplications.service'
+import {ModulesAplication} from '../entities/modules-aplication.entity'
+import {UpdateResultInput} from '@/common/domain/dto/update-result.input'
+import {ModulesAplicationInput} from '../dto/modules-aplication.input'
 
-@Resolver('ModulesAplication')
+@Resolver(() => ModulesAplication)
 export class ModulesAplicationsResolver {
   constructor(private readonly modulesAplicationsService: ModulesAplicationsService) {}
 
-  @Mutation('createModulesAplication')
-  create(
-    @Args('createModulesAplicationInput') createModulesAplicationInput: CreateModulesAplicationInput
+  @Mutation(() => ModulesAplicationInput)
+  async createModulesAplication(
+    @Args('modulesAplication') createModulesAplicationInput: CreateModulesAplicationInput
   ) {
-    return this.modulesAplicationsService.create(createModulesAplicationInput)
+    return await this.modulesAplicationsService.createModulesAplication(
+      createModulesAplicationInput
+    )
   }
 
-  @Query('modulesAplications')
-  findAll() {
-    return this.modulesAplicationsService.findAll()
+  @Query(() => ModulesAplicationInput)
+  async findAllModulesAplications() {
+    return await this.modulesAplicationsService.findAll()
   }
 
-  @Query('modulesAplication')
-  findOne(@Args('id') id: number) {
-    return this.modulesAplicationsService.findOne(id)
+  @Query(() => ModulesAplicationInput)
+  async findOneModuleAplication(@Args('id') id: number) {
+    return await this.modulesAplicationsService.findOne(id)
   }
 
-  @Mutation('updateModulesAplication')
-  update(
-    @Args('updateModulesAplicationInput') updateModulesAplicationInput: UpdateModulesAplicationInput
+  @Mutation(() => UpdateResultInput)
+  async updateModuleAplication(
+    @Args('modulesAplication') updateModulesAplicationInput: UpdateModulesAplicationInput
   ) {
-    return this.modulesAplicationsService.update(
-      updateModulesAplicationInput.id,
+    return await this.modulesAplicationsService.updateModulesAplication(
+      updateModulesAplicationInput.id_modules_aplication,
       updateModulesAplicationInput
     )
   }
 
-  @Mutation('removeModulesAplication')
-  remove(@Args('id') id: number) {
-    return this.modulesAplicationsService.remove(id)
+  @Mutation(() => UpdateResultInput)
+  async removeModuleAplication(@Args('id') id: number) {
+    return await this.modulesAplicationsService.deleteById(id)
   }
 }
