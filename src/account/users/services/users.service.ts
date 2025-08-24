@@ -17,15 +17,15 @@ export class UsersService extends GenericService<User, UserInput> {
     super(User, UserInput)
   }
 
-    protected getRepository(): Repository<User> {
-      return this.userRepository
-    }
+  protected getRepository(): Repository<User> {
+    return this.userRepository
+  }
 
   async createUser(user: CreateUserInput) {
-    const result = await this.findOneByEmail(user.email) // || (await this.findOneByUsername(user.username))
-    if (result != null) {
-      throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
-    }
+    // const result = await this.findOneByEmail(user.email) // || (await this.findOneByUsername(user.username))
+    // if (result != null) {
+    //   throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
+    // }
     const newUser = this.getRepository().create(user)
 
     const results = await this.getRepository().save(newUser)
@@ -44,13 +44,13 @@ export class UsersService extends GenericService<User, UserInput> {
   //     return user
   //   }
 
-  async findOneByEmail(email: string): Promise<any> {
-    const user = await this.getRepository().findOne({
-      where: {email: email},
-    })
+  // async findOneByEmail(email: string): Promise<any> {
+  //   const user = await this.getRepository().findOne({
+  //     where: {email: email},
+  //   })
 
-    return user
-  }
+  //   return user
+  // }
 
   // async getRefreshTokenOfUserId(user_id: number) {
   //   const user = await this.getRepository().findOne({

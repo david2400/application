@@ -22,10 +22,10 @@ export class ClientsService extends GenericService<Client, ClientInput> {
   }
 
   async createClient(client: CreateClientInput) {
-    const result = await this.findOneByEmail(client.email) // || (await this.findOneByUsername(client.username))
-    if (result != null) {
-      throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
-    }
+    // const result = await this.findOneByEmail(client.email) // || (await this.findOneByUsername(client.username))
+    // if (result != null) {
+    //   throw new HttpException({message: 'User already registered'}, HttpStatus.NOT_FOUND)
+    // }
     const newUser = this.getRepository().create(client)
 
     const results = await this.getRepository().save(newUser)
@@ -44,13 +44,13 @@ export class ClientsService extends GenericService<Client, ClientInput> {
   //     return client
   //   }
 
-  async findOneByEmail(email: string): Promise<any> {
-    const client = await this.getRepository().findOne({
-      where: {email: email},
-    })
+  // async findOneByEmail(email: string): Promise<any> {
+  //   const client = await this.getRepository().findOne({
+  //     where: {email: email},
+  //   })
 
-    return client
-  }
+  //   return client
+  // }
 
   // async getRefreshTokenOfUserId(user_id: number) {
   //   const client = await this.getRepository().findOne({

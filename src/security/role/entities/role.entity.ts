@@ -3,7 +3,7 @@ import {BaseEntity} from '@/common/domain/entities/base.abstract.entities'
 import {RolePermission} from '../../role-permission/entities/role-permission.entity'
 import {Profile} from '../../../account/profile/entities/profile.entity'
 import {Field, ObjectType} from '@nestjs/graphql'
-import { User } from '@/src/account/users/entities/user.entity'
+import {User} from '@/src/account/users/entities/user.entity'
 
 @Entity('Role')
 @ObjectType()
@@ -26,6 +26,26 @@ export class Role extends BaseEntity {
   })
   @Field(() => String)
   description: string
+
+  @Column({
+    type: 'boolean',
+    nullable: false,
+  })
+  @Field(() => Boolean)
+  manage_users: boolean
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  @Field(() => Boolean)
+  requires_approval?: boolean
+
+  @Column({
+    type: 'json',
+  })
+  @Field(() => JSON)
+  approval_workflow?: JSON
 
   @ManyToMany(() => User, (user) => user.user_role, {lazy: true})
   // @Field(() => [Role])

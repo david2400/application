@@ -1,34 +1,37 @@
 import {Resolver, Query, Mutation, Args} from '@nestjs/graphql'
-import {CreateCompanyInput} from '../dto/create-company.input'
-import {UpdateCompanyInput} from '../dto/update-company.input'
+import {CreateCompanyInput} from '../dto/create-Company.input'
+import {UpdateCompanyInput} from '../dto/update-Company.input'
 import {CompanysService} from '../services/companys.service'
+import {Company} from '../entities/company.entity'
+import { CompanyInput } from '../dto/company.input'
+import { UpdateResultInput } from '@/common/domain/dto/update-result.input'
 
-@Resolver('Company')
+@Resolver(() => Company)
 export class CompanysResolver {
   constructor(private readonly companysService: CompanysService) {}
 
-  @Mutation('createCompany')
-  create(@Args('createCompanyInput') createCompanyInput: CreateCompanyInput) {
-    return this.companysService.create(createCompanyInput)
+  @Mutation(() => CompanyInput)
+  async create(@Args('company') createCompanyInput: CreateCompanyInput) {
+    return this.companysService.createCompany(createCompanyInput)
   }
 
-  @Query('companys')
-  findAll() {
+  @Query(() => [CompanyInput])
+  async findAllCompany() {
     return this.companysService.findAll()
   }
 
-  @Query('company')
-  findOne(@Args('id') id: number) {
+  @Query(() => CompanyInput)
+  async findOneCompany(@Args('id') id: number) {
     return this.companysService.findOne(id)
   }
 
-  @Mutation('updateCompany')
-  update(@Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput) {
-    return this.companysService.update(updateCompanyInput.id, updateCompanyInput)
+  @Mutation(() => UpdateResultInput)
+  async updateCompany(@Args('company') updateCompanyInput: UpdateCompanyInput) {
+    return this.companysService.updateCompany(updateCompanyInput.id_company, updateCompanyInput)
   }
 
-  @Mutation('removeCompany')
-  remove(@Args('id') id: number) {
-    return this.companysService.remove(id)
+  @Mutation(() => UpdateResultInput)
+  async removeCompany(@Args('id') id: number) {
+    return this.companysService.deleteById(id)
   }
 }

@@ -27,28 +27,30 @@ export class ClientInput {
   second_last_name?: string
 
   @IsString()
-  @Field(() => String)
-  card_id: string
-
-  @IsString()
-  @Field(() => String)
   type_id: string
 
   @IsString()
   @Field(() => String)
-  email: string
+  card_id: string
+
+  // @IsString()
+  // @Field(() => String)
+  // email: string
+
+  @IsString()
+  sex: string
 
   @IsString()
   @Field(() => String)
   gender: string
 
-  @IsString()
-  @Field(() => String)
-  address: string
+  // @IsString()
+  // @Field(() => String)
+  // address: string
 
-  @IsString()
-  @Field(() => String)
-  phone: string
+  // @IsString()
+  // @Field(() => String)
+  // phone: string
 
   @IsArray()
   users?: UserInput[]

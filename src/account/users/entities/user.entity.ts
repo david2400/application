@@ -30,13 +30,22 @@ export class User extends BaseEntity {
     nullable: false,
     unique: true,
   })
+  @Field(() => String)
   username: string
 
   @Column({
     type: 'text',
     nullable: false,
   })
+  @Field(() => String)
   password: string
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  @Field(() => Date)
+  last_login: Date
 
   @Column({
     type: 'text',

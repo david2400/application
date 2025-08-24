@@ -5,8 +5,7 @@ import {RolePermisionModule} from './role-permission/role-permission.module'
 import {PermissionModule} from './permission/permission.module'
 import {AplicationsModule} from './aplications/aplications.module'
 import {RoleModule} from './role/role.module'
-import {ProfileModule} from '../account/profile/profile.module'
-
+  
 @Module({
   imports: [
     RoleModule,

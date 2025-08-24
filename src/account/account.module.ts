@@ -5,7 +5,17 @@ import {ProfileModule} from './profile/profile.module'
 import {CompanysModule} from './companys/companys.module'
 
 @Module({
-  imports: [CompanysModule, ProfileModule, UsersModule, ClientsModule],
-  exports: [CompanysModule, ProfileModule, UsersModule],
+  imports: [
+    CompanysModule, 
+    ProfileModule, 
+    UsersModule, 
+    ClientsModule
+  ],
+  exports: [
+    CompanysModule, 
+    ProfileModule, 
+    UsersModule,
+     ClientsModule
+    ],
 })
 export class AccountModule {}
